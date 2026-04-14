@@ -17,6 +17,7 @@ export default async function DashboardPage() {
     { count: companyCount },
     { count: thesisCount },
     { count: founderCount },
+    { count: dealCount },
     { data: recentClips },
     { data: recentCompanies },
     { data: allTheses },
@@ -25,6 +26,7 @@ export default async function DashboardPage() {
     supabase.from("companies").select("*", { count: "exact", head: true }).eq("user_id", uid),
     supabase.from("theses").select("*", { count: "exact", head: true }).eq("user_id", uid),
     supabase.from("founders").select("*", { count: "exact", head: true }).eq("user_id", uid),
+    supabase.from("deals").select("*", { count: "exact", head: true }).eq("user_id", uid).not("stage", "in", "(passed,invested)"),
     supabase.from("clips").select("*").eq("user_id", uid).order("created_at", { ascending: false }).limit(5),
     supabase.from("companies").select("*").eq("user_id", uid).order("updated_at", { ascending: false }).limit(5),
     supabase.from("theses").select("*").eq("user_id", uid).order("confidence", { ascending: false }),
@@ -55,9 +57,10 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats grid */}
-      <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-5">
         <StatCard label="Clips" value={clipCount ?? 0} href="/feed" />
         <StatCard label="Companies" value={companyCount ?? 0} href="/companies" />
+        <StatCard label="Active Deals" value={dealCount ?? 0} href="/deals" accent />
         <StatCard label="Theses" value={thesisCount ?? 0} href="/theses" />
         <StatCard label="Founders" value={founderCount ?? 0} href="/founders" />
       </div>
@@ -211,13 +214,17 @@ export default async function DashboardPage() {
   );
 }
 
-function StatCard({ label, value, href }: { label: string; value: number; href: string }) {
+function StatCard({ label, value, href, accent }: { label: string; value: number; href: string; accent?: boolean }) {
   return (
     <Link
       href={href}
-      className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-4 hover:border-[var(--accent)]/40 transition-colors"
+      className={`rounded-lg border px-4 py-4 transition-colors ${
+        accent
+          ? "border-[var(--accent)]/30 bg-[var(--accent)]/5 hover:border-[var(--accent)]/50"
+          : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)]/40"
+      }`}
     >
-      <p className="text-2xl font-semibold text-[var(--text)]">{value}</p>
+      <p className={`text-2xl font-semibold ${accent ? "text-[var(--accent)]" : "text-[var(--text)]"}`}>{value}</p>
       <p className="mt-0.5 text-xs text-[var(--muted)]">{label}</p>
     </Link>
   );

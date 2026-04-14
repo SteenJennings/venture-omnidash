@@ -5,6 +5,7 @@ import type { Thesis, Clip, Company } from "@/types/database.types";
 import ThesisActions from "./ThesisActions";
 import ThesisCompanyLinker from "./ThesisCompanyLinker";
 import ExportThesisButton from "./ExportThesisButton";
+import ConvictionBuilder from "./ConvictionBuilder";
 
 export default async function ThesisDetailPage({
   params,
@@ -221,6 +222,12 @@ export default async function ThesisDetailPage({
           </ul>
         )}
       </section>
+
+      <ConvictionBuilder
+        clipCount={linkedClips.length}
+        companyCount={linkedCompanies.length}
+        hasDescription={!!t.description}
+      />
     </div>
   );
 }
