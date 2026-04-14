@@ -2,14 +2,12 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import type { Clip } from "@/types/database.types";
 
 type Thesis = { id: string; title: string };
 
 export default function FeedClient({ clips }: { clips: Clip[] }) {
   const router = useRouter();
-  const supabase = createClient();
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -19,20 +17,11 @@ export default function FeedClient({ clips }: { clips: Clip[] }) {
   const [theses, setTheses] = useState<Thesis[]>([]);
 
   useEffect(() => {
-    async function load() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
-      const { data } = await supabase
-        .from("theses")
-        .select("id, title")
-        .eq("user_id", user.id)
-        .order("title");
-      setTheses((data ?? []) as Thesis[]);
-    }
-    load();
-  }, [supabase]);
+    fetch("/api/theses")
+      .then((r) => r.ok ? r.json() : [])
+      .then((data) => setTheses(data as Thesis[]))
+      .catch(() => {});
+  }, []);
 
   // All unique tags across clips
   const allTags = useMemo(() => {

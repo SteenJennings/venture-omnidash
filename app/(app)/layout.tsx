@@ -22,12 +22,16 @@ export default async function AppLayout({
   return (
     <div className="flex h-full bg-[var(--bg)]">
       {/* Sidebar */}
-      <aside className="flex w-52 shrink-0 flex-col border-r border-[var(--border)] bg-[var(--surface)]">
+      <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border)] bg-[var(--surface)]">
         {/* Logo */}
-        <div className="border-b border-[var(--border)] px-5 py-5">
-          <span className="text-sm font-semibold tracking-tight text-[var(--text)]">
-            Venture Signal
-          </span>
+        <div className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-5">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[var(--accent)] text-xs font-bold text-black tracking-tight">
+            VS
+          </div>
+          <div>
+            <p className="text-sm font-semibold leading-tight text-[var(--text)]">Venture Signal</p>
+            <p className="text-[10px] text-[var(--muted)] leading-tight">Deal flow intelligence</p>
+          </div>
         </div>
 
         {/* Nav links */}
@@ -37,18 +41,26 @@ export default async function AppLayout({
 
         {/* User */}
         <div className="border-t border-[var(--border)] px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--accent)] text-xs font-semibold text-black">
-              {initials}
-            </div>
-            <span
-              className="truncate text-xs text-[var(--muted)]"
-              title={email}
+          {email ? (
+            <>
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--border)] text-[10px] font-semibold text-[var(--text)]">
+                  {initials}
+                </div>
+                <span className="truncate text-xs text-[var(--muted)]" title={email}>
+                  {email}
+                </span>
+              </div>
+              <SignOutButton />
+            </>
+          ) : (
+            <a
+              href="/login"
+              className="block text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors"
             >
-              {email}
-            </span>
-          </div>
-          {email && <SignOutButton />}
+              Sign in →
+            </a>
+          )}
         </div>
       </aside>
 

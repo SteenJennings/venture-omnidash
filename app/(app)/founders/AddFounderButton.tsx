@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 
 export default function AddFounderButton() {
   const [open, setOpen] = useState(false);
@@ -36,7 +35,6 @@ function AddFounderModal({
   onClose: () => void;
   onSuccess: () => void;
 }) {
-  const supabase = createClient();
   const [name, setName] = useState("");
   const [twitter, setTwitter] = useState("");
   const [linkedin, setLinkedin] = useState("");
@@ -55,30 +53,26 @@ function AddFounderModal({
     setLoading(true);
     setError(null);
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      setError("Not authenticated");
+    try {
+      const res = await fetch("/api/founders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          twitter: twitter.trim().replace(/^@/, "") || null,
+          linkedin: linkedin.trim() || null,
+          notes: notes.trim() || null,
+        }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error((body as { error?: string }).error ?? "Failed to save");
+      }
+      onSuccess();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
       setLoading(false);
-      return;
     }
-
-    const { error: insertError } = await supabase.from("founders").insert({
-      user_id: user.id,
-      name: name.trim(),
-      twitter: twitter.trim().replace(/^@/, "") || null,
-      linkedin: linkedin.trim() || null,
-      notes: notes.trim() || null,
-    });
-
-    if (insertError) {
-      setError(insertError.message);
-      setLoading(false);
-      return;
-    }
-
-    onSuccess();
   }
 
   return (

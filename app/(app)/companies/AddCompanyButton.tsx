@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 
 const STAGES = ["pre-seed", "seed", "series-a", "series-b", "growth"];
 const STATUSES = ["tracking", "active", "passed", "portfolio"];
@@ -40,7 +39,6 @@ function AddCompanyModal({
   onClose: () => void;
   onSuccess: () => void;
 }) {
-  const supabase = createClient();
   const [name, setName] = useState("");
   const [sector, setSector] = useState("");
   const [stage, setStage] = useState("");
@@ -61,32 +59,27 @@ function AddCompanyModal({
     setLoading(true);
     setError(null);
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      setError("Not authenticated");
+    try {
+      const res = await fetch("/api/companies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          sector: sector.trim() || null,
+          stage: stage || null,
+          status,
+          thesis: thesis.trim() || null,
+        }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error((body as { error?: string }).error ?? "Failed to save");
+      }
+      onSuccess();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
       setLoading(false);
-      return;
     }
-
-    const { error: insertError } = await supabase.from("companies").insert({
-      user_id: user.id,
-      name: name.trim(),
-      sector: sector.trim() || null,
-      stage: stage || null,
-      status,
-      thesis: thesis.trim() || null,
-    });
-
-    if (insertError) {
-      setError(insertError.message);
-      setLoading(false);
-      return;
-    }
-
-    onSuccess();
   }
 
   return (

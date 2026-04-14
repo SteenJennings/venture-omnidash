@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 
 type SourceType = "tweet" | "article" | "conversation" | "thought";
 type Company = { id: string; name: string };
@@ -43,7 +42,6 @@ function AddClipModal({
   onClose: () => void;
   onSuccess: () => void;
 }) {
-  const supabase = createClient();
   const [url, setUrl] = useState("");
   const [note, setNote] = useState("");
   const [sourceType, setSourceType] = useState<SourceType>("thought");
@@ -55,29 +53,18 @@ function AddClipModal({
   const [error, setError] = useState<string | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Fetch companies for the selector
+  // Fetch companies and founders for selectors
   useEffect(() => {
     async function load() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
-      const { data: compData } = await supabase
-        .from("companies")
-        .select("id, name")
-        .eq("user_id", user.id)
-        .order("name");
-      setCompanies((compData ?? []) as Company[]);
-
-      const { data: founderData } = await supabase
-        .from("founders")
-        .select("id, name")
-        .eq("user_id", user.id)
-        .order("name");
-      setFounders((founderData ?? []) as Founder[]);
+      const [compRes, founderRes] = await Promise.all([
+        fetch("/api/companies"),
+        fetch("/api/founders"),
+      ]);
+      if (compRes.ok) setCompanies(await compRes.json() as Company[]);
+      if (founderRes.ok) setFounders(await founderRes.json() as Founder[]);
     }
     load();
-  }, [supabase]);
+  }, []);
 
   function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
     if (e.target === overlayRef.current) onClose();

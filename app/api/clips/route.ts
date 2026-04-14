@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getPageUser } from "@/lib/dev-user";
 
 async function autoTag(note: string, url: string | null): Promise<string[]> {
   if (!process.env.GEMINI_API_KEY) return [];
@@ -34,11 +35,8 @@ async function autoTag(note: string, url: string | null): Promise<string[]> {
 }
 
 export async function DELETE(request: Request) {
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
@@ -48,22 +46,15 @@ export async function DELETE(request: Request) {
     .from("clips")
     .delete()
     .eq("id", id)
-    .eq("user_id", user.id); // RLS guard — only own clips
+    .eq("user_id", uid);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
 }
 
 export async function POST(request: Request) {
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
 
   let body: unknown;
   try {
@@ -101,7 +92,7 @@ export async function POST(request: Request) {
   const { data: clip, error: insertError } = await supabase
     .from("clips")
     .insert({
-      user_id: user.id,
+      user_id: uid,
       url: url ?? null,
       note,
       source_type: resolvedSourceType,
