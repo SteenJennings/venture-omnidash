@@ -24,7 +24,7 @@ export default async function FeedPage() {
         <div>
           <h1 className="text-lg font-semibold text-[var(--text)]">Feed</h1>
           <p className="text-sm text-[var(--muted)]">
-            {items.length} clip{items.length !== 1 ? "s" : ""}
+            {items.length} clip{items.length !== 1 ? "s" : ""} · signals, observations, and market notes
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -35,10 +35,12 @@ export default async function FeedPage() {
 
       {items.length === 0 ? (
         <div className="rounded-lg border border-dashed border-[var(--border)] p-12 text-center">
-          <p className="text-sm text-[var(--muted)]">No clips yet.</p>
-          <p className="mt-1 text-xs text-[var(--muted)]">
-            Add your first clip to start tracking signals.
+          <p className="text-sm font-medium text-[var(--text)]">No signals yet</p>
+          <p className="mt-2 text-xs leading-relaxed text-[var(--muted)]">
+            A clip is any signal worth remembering — a tweet, article,<br />
+            conversation, or raw thought about a company or market.
           </p>
+          <p className="mt-4 text-xs text-[var(--muted)]">Use the <span className="text-[var(--accent)]">+ Add clip</span> button above to start.</p>
         </div>
       ) : (
         <FeedClient clips={items} />

@@ -121,10 +121,12 @@ function ConfidenceBadge({ confidence }: { confidence: number }) {
 function EmptyState() {
   return (
     <div className="rounded-lg border border-dashed border-[var(--border)] p-12 text-center">
-      <p className="text-sm text-[var(--muted)]">No theses yet.</p>
-      <p className="mt-1 text-xs text-[var(--muted)]">
-        Capture your investment hypotheses here.
+      <p className="text-sm font-medium text-[var(--text)]">No theses yet</p>
+      <p className="mt-2 text-xs leading-relaxed text-[var(--muted)]">
+        A thesis is a falsifiable investment belief — the bet you&apos;re making<br />
+        and why. Great theses have clear evidence and a bear case.
       </p>
+      <p className="mt-4 text-xs text-[var(--muted)]">Use <span className="text-[var(--accent)]">+ New thesis</span> to capture your first hypothesis.</p>
     </div>
   );
 }

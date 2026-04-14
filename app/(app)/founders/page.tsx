@@ -22,7 +22,7 @@ export default async function FoundersPage() {
         <div>
           <h1 className="text-lg font-semibold text-[var(--text)]">Founders</h1>
           <p className="text-sm text-[var(--muted)]">
-            {items.length} founder{items.length !== 1 ? "s" : ""}
+            {items.length} founder{items.length !== 1 ? "s" : ""} on your radar
           </p>
         </div>
         <AddFounderButton />
@@ -30,10 +30,12 @@ export default async function FoundersPage() {
 
       {items.length === 0 ? (
         <div className="rounded-lg border border-dashed border-[var(--border)] p-12 text-center">
-          <p className="text-sm text-[var(--muted)]">No founders yet.</p>
-          <p className="mt-1 text-xs text-[var(--muted)]">
-            Track founders you&apos;re watching across deals.
+          <p className="text-sm font-medium text-[var(--text)]">No founders tracked</p>
+          <p className="mt-2 text-xs leading-relaxed text-[var(--muted)]">
+            Track exceptional founders across deals and time —<br />
+            long before they raise, or after you pass.
           </p>
+          <p className="mt-4 text-xs text-[var(--muted)]">Use <span className="text-[var(--accent)]">+ Add founder</span> to get started.</p>
         </div>
       ) : (
         <ul className="space-y-2">

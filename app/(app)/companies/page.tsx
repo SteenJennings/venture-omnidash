@@ -24,7 +24,7 @@ export default async function CompaniesPage() {
         <div>
           <h1 className="text-lg font-semibold text-[var(--text)]">Companies</h1>
           <p className="text-sm text-[var(--muted)]">
-            {items.length} compan{items.length !== 1 ? "ies" : "y"}
+            {items.length} compan{items.length !== 1 ? "ies" : "y"} tracked
           </p>
         </div>
         <AddCompanyButton />
@@ -32,10 +32,12 @@ export default async function CompaniesPage() {
 
       {items.length === 0 ? (
         <div className="rounded-lg border border-dashed border-[var(--border)] p-12 text-center">
-          <p className="text-sm text-[var(--muted)]">No companies yet.</p>
-          <p className="mt-1 text-xs text-[var(--muted)]">
-            Add a company to start tracking it.
+          <p className="text-sm font-medium text-[var(--text)]">No companies tracked</p>
+          <p className="mt-2 text-xs leading-relaxed text-[var(--muted)]">
+            Track companies you&apos;re watching — startups that fit your thesis,<br />
+            ones you&apos;ve met, or names on your radar.
           </p>
+          <p className="mt-4 text-xs text-[var(--muted)]">Use <span className="text-[var(--accent)]">+ Add company</span> to get started.</p>
         </div>
       ) : (
         <CompaniesClient companies={items} />
