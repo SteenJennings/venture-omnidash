@@ -1,14 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-export default function LoginPage() {
+function LoginForm() {
   const supabase = createClient();
+  const searchParams = useSearchParams();
+  const urlError = searchParams.get("error");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(
+    urlError === "auth" ? "Authentication failed. Please try again." : null
+  );
 
   async function handleGoogleLogin() {
     setLoading(true);
@@ -106,6 +111,27 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-full items-center justify-center bg-[var(--bg)]">
+          <div className="w-full max-w-sm px-4">
+            <div className="mb-10 text-center">
+              <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)]">
+                Venture Signal
+              </h1>
+            </div>
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-8 opacity-50" />
+          </div>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
 

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import NavLinks from "./NavLinks";
 
 export default async function AppLayout({
   children,
@@ -32,11 +32,7 @@ export default async function AppLayout({
 
         {/* Nav links */}
         <nav className="flex-1 px-3 py-4">
-          <ul className="space-y-0.5">
-            <NavItem href="/feed" label="Feed" />
-            <NavItem href="/companies" label="Companies" />
-            <NavItem href="/theses" label="Theses" />
-          </ul>
+          <NavLinks />
         </nav>
 
         {/* User */}
@@ -59,19 +55,6 @@ export default async function AppLayout({
       {/* Main content */}
       <main className="flex-1 overflow-auto">{children}</main>
     </div>
-  );
-}
-
-function NavItem({ href, label }: { href: string; label: string }) {
-  return (
-    <li>
-      <Link
-        href={href}
-        className="flex items-center rounded px-3 py-2 text-sm text-[var(--muted)] transition-colors hover:bg-[var(--border)] hover:text-[var(--text)]"
-      >
-        {label}
-      </Link>
-    </li>
   );
 }
 

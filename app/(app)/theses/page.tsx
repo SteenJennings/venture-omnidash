@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Thesis } from "@/types/database.types";
 import AddThesisButton from "./AddThesisButton";
@@ -38,7 +39,7 @@ export default async function ThesesPage() {
         <ul className="space-y-3">
           {items.map((thesis) => {
             const clipCount =
-              thesis.thesis_clips?.[0]?.count ?? 0;
+              Number(thesis.thesis_clips?.[0]?.count ?? 0);
             return (
               <ThesisCard
                 key={thesis.id}
@@ -68,7 +69,11 @@ function ThesisCard({
   const confidence = thesis.confidence ?? null;
 
   return (
-    <li className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4">
+    <li>
+      <Link
+        href={`/theses/${thesis.id}`}
+        className="block rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4 hover:border-[var(--accent)]/40 transition-colors"
+      >
       <div className="mb-2 flex items-start justify-between gap-4">
         <h3 className="font-medium text-[var(--text)]">{thesis.title}</h3>
         <div className="flex shrink-0 items-center gap-2">
@@ -90,6 +95,7 @@ function ThesisCard({
       )}
 
       <p className="mt-3 text-xs text-[var(--muted)]">Updated {updated}</p>
+      </Link>
     </li>
   );
 }

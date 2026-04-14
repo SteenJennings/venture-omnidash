@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Company } from "@/types/database.types";
 import AddCompanyButton from "./AddCompanyButton";
@@ -85,26 +86,31 @@ function CompanyRow({ company }: { company: Company }) {
   });
 
   return (
-    <li className="flex items-start justify-between gap-4 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <span className="font-medium text-[var(--text)]">{company.name}</span>
-          {company.stage && (
-            <span className="rounded bg-[var(--border)] px-1.5 py-0.5 text-xs text-[var(--muted)]">
-              {company.stage}
-            </span>
-          )}
-          {company.sector && (
-            <span className="text-xs text-[var(--muted)]">{company.sector}</span>
+    <li>
+      <Link
+        href={`/companies/${company.id}`}
+        className="flex items-start justify-between gap-4 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 hover:border-[var(--accent)]/40 transition-colors"
+      >
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <span className="font-medium text-[var(--text)]">{company.name}</span>
+            {company.stage && (
+              <span className="rounded bg-[var(--border)] px-1.5 py-0.5 text-xs text-[var(--muted)]">
+                {company.stage}
+              </span>
+            )}
+            {company.sector && (
+              <span className="text-xs text-[var(--muted)]">{company.sector}</span>
+            )}
+          </div>
+          {company.thesis && (
+            <p className="mt-1 truncate text-xs text-[var(--muted)]">
+              {company.thesis}
+            </p>
           )}
         </div>
-        {company.thesis && (
-          <p className="mt-1 truncate text-xs text-[var(--muted)]">
-            {company.thesis}
-          </p>
-        )}
-      </div>
-      <span className="shrink-0 text-xs text-[var(--muted)]">{updated}</span>
+        <span className="shrink-0 text-xs text-[var(--muted)]">{updated}</span>
+      </Link>
     </li>
   );
 }
