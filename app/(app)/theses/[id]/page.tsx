@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Thesis, Clip, Company } from "@/types/database.types";
 import ThesisActions from "./ThesisActions";
 import ThesisCompanyLinker from "./ThesisCompanyLinker";
+import ExportThesisButton from "./ExportThesisButton";
 
 export default async function ThesisDetailPage({
   params,
@@ -98,6 +99,7 @@ export default async function ThesisDetailPage({
       <div className="mb-6">
         <div className="flex items-start justify-between gap-4">
           <h1 className="text-xl font-semibold text-[var(--text)]">{t.title}</h1>
+          <ExportThesisButton thesis={t} clips={linkedClips} companies={linkedCompanies} />
           {confidenceLabel && (
             <span
               className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium ${confidenceClass}`}

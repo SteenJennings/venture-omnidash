@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Clip } from "@/types/database.types";
 import AddClipButton from "./AddClipButton";
 import FeedClient from "./FeedClient";
+import ExportButton from "./ExportButton";
 
 export default async function FeedPage() {
   const supabase = await createClient();
@@ -27,7 +28,10 @@ export default async function FeedPage() {
             {items.length} clip{items.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <AddClipButton />
+        <div className="flex items-center gap-2">
+          <ExportButton clips={items} />
+          <AddClipButton />
+        </div>
       </div>
 
       {items.length === 0 ? (

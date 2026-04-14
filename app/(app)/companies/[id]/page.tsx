@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Company, Clip } from "@/types/database.types";
 import CompanyActions from "./CompanyActions";
+import ExportCompanyButton from "./ExportCompanyButton";
 
 export default async function CompanyDetailPage({
   params,
@@ -56,6 +57,7 @@ export default async function CompanyDetailPage({
       <div className="mb-6">
         <div className="flex items-start justify-between gap-4">
           <h1 className="text-xl font-semibold text-[var(--text)]">{c.name}</h1>
+          <ExportCompanyButton company={c} clips={linkedClips} />
           <div className="flex shrink-0 items-center gap-2">
             {c.stage && (
               <span className="rounded bg-[var(--border)] px-2 py-0.5 text-xs text-[var(--muted)]">
