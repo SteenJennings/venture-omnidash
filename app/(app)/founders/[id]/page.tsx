@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Founder, Clip } from "@/types/database.types";
+import FounderActions from "./FounderActions";
 
 export default async function FounderDetailPage({
   params,
@@ -73,6 +74,7 @@ export default async function FounderDetailPage({
           )}
           <span className="text-xs text-[var(--muted)]">Since {since}</span>
         </div>
+        <FounderActions founder={f} />
       </div>
 
       {f.notes && (

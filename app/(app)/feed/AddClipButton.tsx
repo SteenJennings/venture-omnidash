@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 
 type SourceType = "tweet" | "article" | "conversation" | "thought";
 type Company = { id: string; name: string };
+type Founder = { id: string; name: string };
 
 const SOURCE_TYPES: SourceType[] = ["tweet", "article", "conversation", "thought"];
 
@@ -47,7 +48,9 @@ function AddClipModal({
   const [note, setNote] = useState("");
   const [sourceType, setSourceType] = useState<SourceType>("thought");
   const [companyId, setCompanyId] = useState<string>("");
+  const [founderId, setFounderId] = useState<string>("");
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [founders, setFounders] = useState<Founder[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -59,12 +62,19 @@ function AddClipModal({
         data: { user },
       } = await supabase.auth.getUser();
       if (!user) return;
-      const { data } = await supabase
+      const { data: compData } = await supabase
         .from("companies")
         .select("id, name")
         .eq("user_id", user.id)
         .order("name");
-      setCompanies((data ?? []) as Company[]);
+      setCompanies((compData ?? []) as Company[]);
+
+      const { data: founderData } = await supabase
+        .from("founders")
+        .select("id, name")
+        .eq("user_id", user.id)
+        .order("name");
+      setFounders((founderData ?? []) as Founder[]);
     }
     load();
   }, [supabase]);
@@ -89,6 +99,7 @@ function AddClipModal({
           note: note.trim(),
           source_type: sourceType,
           company_id: companyId || null,
+          founder_id: founderId || null,
         }),
       });
 
@@ -171,25 +182,39 @@ function AddClipModal({
             />
           </div>
 
-          {/* Company */}
-          {companies.length > 0 && (
-            <div>
-              <label className="mb-1.5 block text-xs text-[var(--muted)]">
-                Company{" "}
-                <span className="text-[var(--muted)] opacity-60">(optional)</span>
-              </label>
-              <select
-                value={companyId}
-                onChange={(e) => setCompanyId(e.target.value)}
-                className="w-full rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
-              >
-                <option value="">None</option>
-                {companies.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
+          {/* Company + Founder */}
+          {(companies.length > 0 || founders.length > 0) && (
+            <div className="grid grid-cols-2 gap-3">
+              {companies.length > 0 && (
+                <div>
+                  <label className="mb-1.5 block text-xs text-[var(--muted)]">Company</label>
+                  <select
+                    value={companyId}
+                    onChange={(e) => setCompanyId(e.target.value)}
+                    className="w-full rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
+                  >
+                    <option value="">None</option>
+                    {companies.map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              {founders.length > 0 && (
+                <div>
+                  <label className="mb-1.5 block text-xs text-[var(--muted)]">Founder</label>
+                  <select
+                    value={founderId}
+                    onChange={(e) => setFounderId(e.target.value)}
+                    className="w-full rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
+                  >
+                    <option value="">None</option>
+                    {founders.map((f) => (
+                      <option key={f.id} value={f.id}>{f.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
           )}
 

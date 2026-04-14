@@ -81,11 +81,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "note is required" }, { status: 400 });
   }
 
-  const { note, url, source_type, company_id } = body as {
+  const { note, url, source_type, company_id, founder_id } = body as {
     note: string;
     url?: string | null;
     source_type?: string;
     company_id?: string | null;
+    founder_id?: string | null;
   };
 
   const validSourceTypes = ["tweet", "article", "conversation", "thought"] as const;
@@ -106,6 +107,7 @@ export async function POST(request: Request) {
       source_type: resolvedSourceType,
       tags: [],
       company_id: company_id ?? null,
+      founder_id: founder_id ?? null,
     })
     .select()
     .single();
