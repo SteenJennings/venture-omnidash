@@ -49,7 +49,7 @@ export default async function DealsPage() {
         <div>
           <h1 className="text-lg font-semibold text-[var(--text)]">Deals</h1>
           <p className="text-sm text-[var(--muted)]">
-            {activeDeals.length} active · {items.length} total
+            {activeDeals.length} active · {items.length} total · pipeline from sourced to invested
           </p>
         </div>
       </div>

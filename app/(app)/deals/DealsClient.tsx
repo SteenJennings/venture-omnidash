@@ -246,7 +246,7 @@ function StageColumn({
       </ul>
 
       {deals.length === 0 && !isAdding && (
-        <p className="text-xs text-[var(--muted)] opacity-50">Empty</p>
+        <p className="text-xs text-[var(--muted)]/40 italic">No deals</p>
       )}
     </div>
   );
