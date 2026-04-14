@@ -1,46 +1,34 @@
 import { NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase/server";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
 async function autoTag(note: string, url: string | null): Promise<string[]> {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return [];
-  }
+  if (!process.env.GEMINI_API_KEY) return [];
 
   const content = [note, url ? `URL: ${url}` : null].filter(Boolean).join("\n");
 
   try {
-    const message = await anthropic.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 256,
-      system:
-        "You extract structured tags from VC deal flow notes. Return ONLY a JSON object with a single key 'tags' containing an array of strings. Tags should include: company names (if mentioned), founder names (if mentioned), themes (e.g. 'AI infrastructure', 'developer tools'), sectors (e.g. 'B2B SaaS', 'fintech'), and any other signal categories. Keep tags concise (1-3 words each). Return 3-8 tags maximum.",
-      messages: [
-        {
-          role: "user",
-          content: `Extract tags from this note:\n\n${content}`,
-        },
-      ],
-    });
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: `Extract tags from this VC note. Return ONLY a JSON object {"tags":["..."]}. Include company names, founder names, themes (e.g. "AI infrastructure"), sectors (e.g. "B2B SaaS"). 3-8 tags max, 1-3 words each.\n\n${content}` }] }],
+          generationConfig: { maxOutputTokens: 256 },
+        }),
+      }
+    );
 
-    const text =
-      message.content[0].type === "text" ? message.content[0].text : "";
-
-    // Parse JSON response
-    const parsed = JSON.parse(text) as { tags?: unknown };
-    const tags = parsed.tags;
-    if (Array.isArray(tags)) {
-      return (tags as unknown[])
-        .filter((t): t is string => typeof t === "string")
-        .slice(0, 10);
+    const json = await res.json() as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
+    const text = json.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) return [];
+    const parsed = JSON.parse(match[0]) as { tags?: unknown };
+    if (Array.isArray(parsed.tags)) {
+      return (parsed.tags as unknown[]).filter((t): t is string => typeof t === "string").slice(0, 10);
     }
     return [];
   } catch {
-    // Non-fatal — clips still save without tags
     return [];
   }
 }
