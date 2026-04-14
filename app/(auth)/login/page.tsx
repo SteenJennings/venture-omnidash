@@ -109,6 +109,17 @@ function LoginForm() {
             <p className="mt-4 text-center text-xs text-red-400">{error}</p>
           )}
         </div>
+
+        {process.env.NODE_ENV === "development" && (
+          <div className="mt-4 text-center">
+            <a
+              href="/dashboard"
+              className="text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors"
+            >
+              Skip login (dev only)
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );
