@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import NavLinks from "./NavLinks";
 
@@ -7,22 +6,18 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let email = "dev@local";
+  let email = "";
 
-  // In production, enforce auth. In development, bypass so UI can be audited.
-  if (process.env.NODE_ENV !== "development") {
+  // Try to get the real user if there's a session, but don't enforce auth
+  try {
     const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      redirect("/login");
-    }
-    email = user.email ?? "";
+    const { data: { user } } = await supabase.auth.getUser();
+    email = user?.email ?? "";
+  } catch {
+    // no session — that's fine
   }
 
-  const initials = email.slice(0, 2).toUpperCase();
+  const initials = email ? email.slice(0, 2).toUpperCase() : "VS";
 
   return (
     <div className="flex h-full bg-[var(--bg)]">
@@ -53,7 +48,7 @@ export default async function AppLayout({
               {email}
             </span>
           </div>
-          {process.env.NODE_ENV !== "development" && <SignOutButton />}
+          {email && <SignOutButton />}
         </div>
       </aside>
 
