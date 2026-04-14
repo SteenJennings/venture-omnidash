@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Company, Clip } from "@/types/database.types";
+import CompanyActions from "./CompanyActions";
 
 export default async function CompanyDetailPage({
   params,
@@ -72,6 +73,7 @@ export default async function CompanyDetailPage({
           <p className="mt-1 text-sm text-[var(--muted)]">{c.sector}</p>
         )}
         <p className="mt-1 text-xs text-[var(--muted)]">Updated {updated}</p>
+        <CompanyActions company={c} />
       </div>
 
       {/* Thesis */}

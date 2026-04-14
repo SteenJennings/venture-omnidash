@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 type SourceType = "tweet" | "article" | "conversation" | "thought";
+type Company = { id: string; name: string };
 
 const SOURCE_TYPES: SourceType[] = ["tweet", "article", "conversation", "thought"];
 
@@ -40,12 +42,32 @@ function AddClipModal({
   onClose: () => void;
   onSuccess: () => void;
 }) {
+  const supabase = createClient();
   const [url, setUrl] = useState("");
   const [note, setNote] = useState("");
   const [sourceType, setSourceType] = useState<SourceType>("thought");
+  const [companyId, setCompanyId] = useState<string>("");
+  const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+
+  // Fetch companies for the selector
+  useEffect(() => {
+    async function load() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase
+        .from("companies")
+        .select("id, name")
+        .eq("user_id", user.id)
+        .order("name");
+      setCompanies((data ?? []) as Company[]);
+    }
+    load();
+  }, [supabase]);
 
   function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
     if (e.target === overlayRef.current) onClose();
@@ -62,7 +84,12 @@ function AddClipModal({
       const res = await fetch("/api/clips", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: url.trim() || null, note: note.trim(), source_type: sourceType }),
+        body: JSON.stringify({
+          url: url.trim() || null,
+          note: note.trim(),
+          source_type: sourceType,
+          company_id: companyId || null,
+        }),
       });
 
       if (!res.ok) {
@@ -143,6 +170,28 @@ function AddClipModal({
               className="w-full resize-none rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
             />
           </div>
+
+          {/* Company */}
+          {companies.length > 0 && (
+            <div>
+              <label className="mb-1.5 block text-xs text-[var(--muted)]">
+                Company{" "}
+                <span className="text-[var(--muted)] opacity-60">(optional)</span>
+              </label>
+              <select
+                value={companyId}
+                onChange={(e) => setCompanyId(e.target.value)}
+                className="w-full rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
+              >
+                <option value="">None</option>
+                {companies.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {error && <p className="text-xs text-red-400">{error}</p>}
 

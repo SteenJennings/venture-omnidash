@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Thesis, Clip, Company } from "@/types/database.types";
+import ThesisActions from "./ThesisActions";
 
 export default async function ThesisDetailPage({
   params,
@@ -105,6 +106,7 @@ export default async function ThesisDetailPage({
           )}
         </div>
         <p className="mt-1 text-xs text-[var(--muted)]">Updated {updated}</p>
+        <ThesisActions thesis={t} />
       </div>
 
       {/* Description */}
