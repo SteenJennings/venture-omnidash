@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Thesis, Clip, Company } from "@/types/database.types";
 import ThesisActions from "./ThesisActions";
+import ThesisCompanyLinker from "./ThesisCompanyLinker";
 
 export default async function ThesisDetailPage({
   params,
@@ -119,11 +120,14 @@ export default async function ThesisDetailPage({
       )}
 
       {/* Linked companies */}
-      {linkedCompanies.length > 0 && (
-        <section className="mb-6">
-          <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-[var(--muted)]">
+      <section className="mb-6">
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-xs font-medium uppercase tracking-widest text-[var(--muted)]">
             Companies ({linkedCompanies.length})
           </h2>
+          <ThesisCompanyLinker thesisId={id} linkedIds={companyIds} />
+        </div>
+        {linkedCompanies.length > 0 && (
           <ul className="space-y-2">
             {linkedCompanies.map((company) => (
               <li key={company.id}>
@@ -150,8 +154,8 @@ export default async function ThesisDetailPage({
               </li>
             ))}
           </ul>
-        </section>
-      )}
+        )}
+      </section>
 
       {/* Linked clips */}
       <section>

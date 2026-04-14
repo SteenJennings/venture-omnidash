@@ -1,16 +1,38 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 import type { Clip } from "@/types/database.types";
+
+type Thesis = { id: string; title: string };
 
 export default function FeedClient({ clips }: { clips: Clip[] }) {
   const router = useRouter();
+  const supabase = createClient();
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [linkingId, setLinkingId] = useState<string | null>(null);
+  const [theses, setTheses] = useState<Thesis[]>([]);
+
+  useEffect(() => {
+    async function load() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase
+        .from("theses")
+        .select("id, title")
+        .eq("user_id", user.id)
+        .order("title");
+      setTheses((data ?? []) as Thesis[]);
+    }
+    load();
+  }, [supabase]);
 
   // All unique tags across clips
   const allTags = useMemo(() => {
@@ -44,6 +66,16 @@ export default function FeedClient({ clips }: { clips: Clip[] }) {
     } finally {
       setDeletingId(null);
     }
+  }
+
+  async function handleLinkThesis(clipId: string, thesisId: string) {
+    if (!thesisId) return;
+    const res = await fetch("/api/thesis-clips", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clip_id: clipId, thesis_id: thesisId }),
+    });
+    if (res.ok) setLinkingId(null);
   }
 
   return (
@@ -93,6 +125,7 @@ export default function FeedClient({ clips }: { clips: Clip[] }) {
             const expanded = expandedId === clip.id;
             const confirming = confirmId === clip.id;
             const deleting = deletingId === clip.id;
+            const showingLink = linkingId === clip.id;
             const date = new Date(clip.created_at).toLocaleDateString("en-US", {
               month: "short",
               day: "numeric",
@@ -158,37 +191,76 @@ export default function FeedClient({ clips }: { clips: Clip[] }) {
                   </div>
                 )}
 
+                {/* Link to thesis inline selector */}
+                {showingLink && theses.length > 0 && (
+                  <div className="mb-2 flex items-center gap-2">
+                    <select
+                      defaultValue=""
+                      onChange={(e) =>
+                        handleLinkThesis(clip.id, e.target.value)
+                      }
+                      className="flex-1 rounded-md border border-[var(--border)] bg-[var(--bg)] px-2 py-1.5 text-xs text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
+                    >
+                      <option value="" disabled>
+                        Select thesis…
+                      </option>
+                      {theses.map((t) => (
+                        <option key={t.id} value={t.id}>
+                          {t.title}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={() => setLinkingId(null)}
+                      className="text-xs text-[var(--muted)] hover:text-[var(--text)]"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+
                 {/* Footer */}
                 <div className="flex items-center justify-between">
                   <p className="text-xs text-[var(--muted)]">{date}</p>
 
-                  {confirming ? (
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-[var(--muted)]">
-                        Delete?
-                      </span>
+                  <div className="flex items-center gap-3">
+                    {theses.length > 0 && !showingLink && (
                       <button
-                        onClick={() => handleDelete(clip.id)}
-                        disabled={deleting}
-                        className="text-xs text-red-400 hover:text-red-300 disabled:opacity-50"
+                        onClick={() => setLinkingId(clip.id)}
+                        className="text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors"
                       >
-                        {deleting ? "Deleting…" : "Yes"}
+                        + thesis
                       </button>
+                    )}
+
+                    {confirming ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-[var(--muted)]">
+                          Delete?
+                        </span>
+                        <button
+                          onClick={() => handleDelete(clip.id)}
+                          disabled={deleting}
+                          className="text-xs text-red-400 hover:text-red-300 disabled:opacity-50"
+                        >
+                          {deleting ? "Deleting…" : "Yes"}
+                        </button>
+                        <button
+                          onClick={() => setConfirmId(null)}
+                          className="text-xs text-[var(--muted)] hover:text-[var(--text)]"
+                        >
+                          No
+                        </button>
+                      </div>
+                    ) : (
                       <button
-                        onClick={() => setConfirmId(null)}
-                        className="text-xs text-[var(--muted)] hover:text-[var(--text)]"
+                        onClick={() => setConfirmId(clip.id)}
+                        className="text-xs text-[var(--muted)] hover:text-red-400 transition-colors"
                       >
-                        No
+                        Delete
                       </button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => setConfirmId(clip.id)}
-                      className="text-xs text-[var(--muted)] hover:text-red-400 transition-colors"
-                    >
-                      Delete
-                    </button>
-                  )}
+                    )}
+                  </div>
                 </div>
               </li>
             );
