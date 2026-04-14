@@ -9,6 +9,7 @@ const NAV = [
   { href: "/companies", label: "Companies" },
   { href: "/founders", label: "Founders" },
   { href: "/theses", label: "Theses" },
+  { href: "/deals", label: "Deals" },
 ];
 
 export default function NavLinks() {

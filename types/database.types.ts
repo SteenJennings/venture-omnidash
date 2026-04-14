@@ -52,6 +52,7 @@ export interface Database {
           name: string;
           sector: string | null;
           stage: string | null;
+          /** watching | tracking | active | meeting | diligence | passed | invested | portfolio */
           status: string | null;
           thesis: string | null;
           key_unknowns: string | null;
@@ -120,6 +121,7 @@ export interface Database {
           user_id: string;
           title: string;
           description: string | null;
+          /** numeric 0-100, null means unset */
           confidence: number | null;
           created_at: string;
           updated_at: string;
@@ -179,6 +181,7 @@ export interface Database {
           id: string;
           user_id: string;
           company_id: string;
+          /** sourced | meeting | diligence | passed | invested */
           stage: string | null;
           next_action: string | null;
           notes: string | null;
