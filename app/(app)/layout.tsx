@@ -7,16 +7,21 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let email = "dev@local";
 
-  if (!user) {
-    redirect("/login");
+  // In production, enforce auth. In development, bypass so UI can be audited.
+  if (process.env.NODE_ENV !== "development") {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      redirect("/login");
+    }
+    email = user.email ?? "";
   }
 
-  const email = user.email ?? "";
   const initials = email.slice(0, 2).toUpperCase();
 
   return (
@@ -48,7 +53,7 @@ export default async function AppLayout({
               {email}
             </span>
           </div>
-          <SignOutButton />
+          {process.env.NODE_ENV !== "development" && <SignOutButton />}
         </div>
       </aside>
 

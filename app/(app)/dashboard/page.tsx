@@ -1,15 +1,12 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getPageUser } from "@/lib/dev-user";
 import type { Clip, Company, Thesis } from "@/types/database.types";
 import AddClipButton from "../feed/AddClipButton";
 
 export default async function DashboardPage() {
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const uid = user!.id;
 
   // Parallel fetches
   const [

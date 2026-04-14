@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getPageUser } from "@/lib/dev-user";
 import type { Company } from "@/types/database.types";
 import AddCompanyButton from "./AddCompanyButton";
 import CompaniesClient from "./CompaniesClient";
@@ -6,15 +7,13 @@ import CompaniesClient from "./CompaniesClient";
 type CompanyWithClipCount = Company & { clips: { count: number }[] };
 
 export default async function CompaniesPage() {
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   const { data: companies } = await supabase
     .from("companies")
     .select("*, clips(count)")
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .order("updated_at", { ascending: false });
 
   const items = (companies ?? []) as unknown as CompanyWithClipCount[];

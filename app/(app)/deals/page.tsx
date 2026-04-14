@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getPageUser } from "@/lib/dev-user";
 import type { Deal, Company } from "@/types/database.types";
 import DealsClient from "./DealsClient";
 
@@ -8,15 +9,13 @@ const STAGES = ["sourced", "meeting", "diligence", "passed", "invested"] as cons
 type Stage = (typeof STAGES)[number];
 
 export default async function DealsPage() {
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   const { data: deals } = await supabase
     .from("deals")
     .select("*, companies(*)")
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .order("updated_at", { ascending: false });
 
   const items = (deals ?? []) as unknown as DealWithCompany[];
@@ -26,7 +25,7 @@ export default async function DealsPage() {
   const { data: allCompanies } = await supabase
     .from("companies")
     .select("id, name")
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .order("name");
 
   const companies = (allCompanies ?? []) as Pick<Company, "id" | "name">[];

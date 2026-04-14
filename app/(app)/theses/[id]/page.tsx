@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getPageUser } from "@/lib/dev-user";
 import type { Thesis, Clip, Company } from "@/types/database.types";
 import ThesisActions from "./ThesisActions";
 import ThesisCompanyLinker from "./ThesisCompanyLinker";
@@ -13,16 +14,14 @@ export default async function ThesisDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   const { data: thesis } = await supabase
     .from("theses")
     .select("*")
     .eq("id", id)
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .single();
 
   if (!thesis) notFound();

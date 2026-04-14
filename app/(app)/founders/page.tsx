@@ -1,18 +1,17 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getPageUser } from "@/lib/dev-user";
 import type { Founder } from "@/types/database.types";
 import AddFounderButton from "./AddFounderButton";
 
 export default async function FoundersPage() {
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   const { data: founders } = await supabase
     .from("founders")
     .select("*")
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .order("name");
 
   const items = (founders ?? []) as Founder[];

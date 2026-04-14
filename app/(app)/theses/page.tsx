@@ -1,19 +1,18 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getPageUser } from "@/lib/dev-user";
 import type { Thesis } from "@/types/database.types";
 import AddThesisButton from "./AddThesisButton";
 
 export default async function ThesesPage() {
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   // Fetch theses + clip counts via thesis_clips join
   const { data: theses } = await supabase
     .from("theses")
     .select("*, thesis_clips(count)")
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .order("updated_at", { ascending: false });
 
   const items = (theses ?? []) as (Thesis & {

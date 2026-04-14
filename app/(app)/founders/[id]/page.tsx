@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getPageUser } from "@/lib/dev-user";
 import type { Founder, Clip } from "@/types/database.types";
 import FounderActions from "./FounderActions";
 
@@ -10,16 +11,14 @@ export default async function FounderDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   const { data: founder } = await supabase
     .from("founders")
     .select("*")
     .eq("id", id)
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .single();
 
   if (!founder) notFound();
@@ -30,7 +29,7 @@ export default async function FounderDetailPage({
     .from("clips")
     .select("*")
     .eq("founder_id", id)
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .order("created_at", { ascending: false });
 
   const linkedClips = (clips ?? []) as Clip[];

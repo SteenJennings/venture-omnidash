@@ -1,19 +1,18 @@
 import { createClient } from "@/lib/supabase/server";
+import { getPageUser } from "@/lib/dev-user";
 import type { Clip } from "@/types/database.types";
 import AddClipButton from "./AddClipButton";
 import FeedClient from "./FeedClient";
 import ExportButton from "./ExportButton";
 
 export default async function FeedPage() {
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   const { data: clips } = await supabase
     .from("clips")
     .select("*")
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .order("created_at", { ascending: false });
 
   const items = (clips ?? []) as Clip[];

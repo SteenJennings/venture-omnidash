@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getPageUser } from "@/lib/dev-user";
 import type { Company, Clip } from "@/types/database.types";
 import CompanyActions from "./CompanyActions";
 import ExportCompanyButton from "./ExportCompanyButton";
@@ -11,16 +12,14 @@ export default async function CompanyDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const { id: uid } = await getPageUser();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   const { data: company } = await supabase
     .from("companies")
     .select("*")
     .eq("id", id)
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .single();
 
   if (!company) notFound();
@@ -32,7 +31,7 @@ export default async function CompanyDetailPage({
     .from("clips")
     .select("*")
     .eq("company_id", id)
-    .eq("user_id", user!.id)
+    .eq("user_id", uid)
     .order("created_at", { ascending: false });
 
   const linkedClips = (clips ?? []) as Clip[];
