@@ -74,10 +74,7 @@ function ThesisRow({ thesis, clipCount }: { thesis: Thesis; clipCount: number })
         className="flex items-center justify-between gap-6 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-5 py-4 transition-all hover:border-[var(--accent)]/30 hover:bg-[var(--surface-raised)]"
       >
         <div className="min-w-0 flex-1">
-          <p className="text-[14px] font-medium text-[var(--text)]">{thesis.title}</p>
-          {thesis.description && (
-            <p className="mt-0.5 truncate text-[12px] text-[var(--muted)]">{thesis.description}</p>
-          )}
+          <p className="truncate text-[14px] font-medium text-[var(--text)]">{thesis.title}</p>
         </div>
         <div className="flex shrink-0 items-center gap-4">
           {clipCount > 0 && (
