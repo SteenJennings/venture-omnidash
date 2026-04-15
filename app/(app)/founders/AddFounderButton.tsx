@@ -13,7 +13,7 @@ export default function AddFounderButton({ variant = "cta" }: { variant?: "heade
         onClick={() => setOpen(true)}
         className={
           variant === "header"
-            ? "rounded-md border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-2.5 py-1 text-[11px] font-medium text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20"
+            ? "rounded-md border border-[var(--accent)]/50 bg-[var(--accent)]/[0.08] px-3 py-1.5 text-[12px] font-medium text-[var(--accent)] transition-all hover:bg-[var(--accent)]/[0.15]"
             : "rounded-md bg-[var(--accent)] px-3 py-1.5 text-[12px] font-semibold text-black transition-opacity hover:opacity-90"
         }
       >

@@ -92,7 +92,7 @@ export default async function DashboardPage() {
             />
           </div>
         ) : (
-          <div className="grid flex-1 grid-cols-[1fr_320px] divide-x divide-[var(--border-subtle)]">
+          <div className="grid flex-1 grid-cols-[1fr_360px] divide-x divide-[var(--border-subtle)]">
 
             {/* Left — signal feed */}
             <div className="min-w-0 px-8 py-8">
