@@ -1,6 +1,6 @@
 export default function FoundersLoading() {
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8 animate-pulse">
+    <div className="px-8 py-8 animate-pulse">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <div className="h-5 w-20 rounded bg-[var(--border)]" />

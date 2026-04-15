@@ -91,74 +91,72 @@ function LoginForm() {
           </p>
         </div>
 
-        {/* Card */}
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-7 shadow-2xl shadow-black/60">
-          {sent ? (
-            <div className="py-6 text-center">
-              <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-lg">
-                ✉
-              </div>
-              <p className="text-[14px] font-semibold text-[var(--text)]">Check your inbox</p>
-              <p className="mt-2 text-[13px] text-[var(--muted)]">
-                Magic link sent to{" "}
-                <span className="font-medium text-[var(--text)]">{email}</span>
-              </p>
-              <button
-                onClick={() => setSent(false)}
-                className="mt-5 text-[12px] text-[var(--muted)] underline-offset-2 hover:text-[var(--text)] hover:underline"
-              >
-                Use a different address
-              </button>
+        {/* Auth options */}
+        {sent ? (
+          <div className="mt-2 text-center">
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-base">
+              ✉
             </div>
-          ) : (
-            <>
-              {/* Google */}
-              <button
-                onClick={handleGoogleLogin}
-                disabled={loading}
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] px-4 py-3 text-[13px] font-medium text-[var(--text)] transition-all hover:border-white/10 hover:bg-white/[0.05] active:scale-[0.98] disabled:opacity-40"
-              >
-                <GoogleIcon />
-                Continue with Google
-              </button>
-
-              <div className="my-6 flex items-center gap-3">
-                <div className="h-px flex-1 bg-[var(--border)]" />
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-[var(--muted-2)]">or</span>
-                <div className="h-px flex-1 bg-[var(--border)]" />
-              </div>
-
-              {/* Magic link */}
-              <form onSubmit={handleMagicLink} className="space-y-3">
-                <input
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[13px] text-[var(--text)] placeholder:text-[var(--muted-2)] transition-colors focus:border-[var(--accent)]/60 focus:outline-none"
-                />
-                <button
-                  type="submit"
-                  disabled={loading || !email}
-                  className="w-full rounded-xl bg-[var(--accent)] px-4 py-3 text-[13px] font-semibold text-black shadow-lg shadow-amber-500/20 transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-40"
-                >
-                  {loading ? "Sending…" : "Send magic link"}
-                </button>
-              </form>
-            </>
-          )}
-
-          {error && (
-            <p className="mt-4 rounded-lg border border-red-900/30 bg-red-950/20 px-3 py-2 text-center text-[12px] text-red-400">
-              {error}
+            <p className="text-[14px] font-semibold text-[var(--text)]">Check your inbox</p>
+            <p className="mt-2 text-[13px] text-[var(--muted)]">
+              Magic link sent to{" "}
+              <span className="font-medium text-[var(--text)]">{email}</span>
             </p>
-          )}
-        </div>
+            <button
+              onClick={() => setSent(false)}
+              className="mt-5 text-[12px] text-[var(--muted)] underline-offset-2 hover:text-[var(--text)] hover:underline"
+            >
+              Use a different address
+            </button>
+          </div>
+        ) : (
+          <div className="mt-2 space-y-3">
+            {/* Google */}
+            <button
+              onClick={handleGoogleLogin}
+              disabled={loading}
+              className="flex w-full items-center justify-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[13px] font-medium text-[var(--text)] shadow-lg shadow-black/40 transition-all hover:border-white/10 hover:bg-[var(--surface-raised)] active:scale-[0.99] disabled:opacity-40"
+            >
+              <GoogleIcon />
+              Continue with Google
+            </button>
+
+            <div className="flex items-center gap-3 py-1">
+              <div className="h-px flex-1 bg-[var(--border)]" />
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-[var(--muted-2)]">or</span>
+              <div className="h-px flex-1 bg-[var(--border)]" />
+            </div>
+
+            {/* Magic link */}
+            <form onSubmit={handleMagicLink} className="space-y-3">
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[13px] text-[var(--text)] shadow-lg shadow-black/40 placeholder:text-[var(--muted-2)] transition-colors focus:border-[var(--accent)]/60 focus:outline-none"
+              />
+              <button
+                type="submit"
+                disabled={loading || !email}
+                className="w-full rounded-xl bg-[var(--accent)] px-4 py-3 text-[13px] font-semibold text-black shadow-lg shadow-amber-500/20 transition-all hover:brightness-110 active:scale-[0.99] disabled:opacity-40"
+              >
+                {loading ? "Sending…" : "Send magic link"}
+              </button>
+            </form>
+
+            {error && (
+              <p className="rounded-lg border border-red-900/30 bg-red-950/20 px-3 py-2 text-center text-[12px] text-red-400">
+                {error}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Footer */}
-        <p className="mt-6 text-center text-[11px] leading-relaxed text-[var(--muted-2)]">
-          Your data stays yours.&nbsp; No tracking, no ads.
+        <p className="mt-8 text-center text-[11px] text-[var(--muted-2)]">
+          Your data stays yours. No tracking, no ads.
         </p>
       </div>
     </div>

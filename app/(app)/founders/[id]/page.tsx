@@ -40,7 +40,7 @@ export default async function FounderDetailPage({
   });
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8">
+    <div className="px-8 py-8">
       <Link
         href="/founders"
         className="mb-6 inline-flex items-center gap-1 text-xs text-[var(--muted)] hover:text-[var(--text)] transition-colors"

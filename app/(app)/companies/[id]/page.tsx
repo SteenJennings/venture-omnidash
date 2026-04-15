@@ -43,7 +43,7 @@ export default async function CompanyDetailPage({
   });
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8">
+    <div className="px-8 py-8">
       {/* Back */}
       <Link
         href="/companies"

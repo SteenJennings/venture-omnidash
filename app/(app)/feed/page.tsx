@@ -18,7 +18,7 @@ export default async function FeedPage() {
   const items = (clips ?? []) as Clip[];
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8">
+    <div className="px-8 py-8">
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
         <div>

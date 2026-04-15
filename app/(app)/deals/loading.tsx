@@ -1,6 +1,6 @@
 export default function DealsLoading() {
   return (
-    <div className="mx-auto max-w-5xl px-6 py-8 animate-pulse">
+    <div className="px-8 py-8 animate-pulse">
       <div className="mb-8">
         <div className="h-5 w-16 rounded bg-[var(--border)]" />
         <div className="mt-1 h-3 w-24 rounded bg-[var(--border)]" />

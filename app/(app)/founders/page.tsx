@@ -17,7 +17,7 @@ export default async function FoundersPage() {
   const items = (founders ?? []) as Founder[];
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8">
+    <div className="px-8 py-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-lg font-semibold text-[var(--text)]">Founders</h1>
