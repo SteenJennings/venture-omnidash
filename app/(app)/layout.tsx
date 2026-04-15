@@ -64,7 +64,7 @@ export default async function AppLayout({
       </aside>
 
       {/* Main */}
-      <main className="flex-1 overflow-auto">{children}</main>
+      <main className="flex min-h-full flex-1 flex-col overflow-auto">{children}</main>
     </div>
   );
 }
