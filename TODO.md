@@ -4,6 +4,12 @@ Work top-to-bottom. Each item is self-contained enough to execute without re-rea
 
 ---
 
+## ✅ Completed (session 3 — April 15, 2026)
+
+- [x] Dashboard redesign — wider layout (max-w-5xl), top bar with greeting, icon stat cards, onboarding checklist with progress bar, colored source/status badges
+
+---
+
 ## ✅ Completed (session 2 — April 13, 2026)
 
 - [x] Fix auth magic link flow — created `app/auth/callback/route.ts` matching login redirect URL
@@ -59,12 +65,11 @@ Work top-to-bottom. Each item is self-contained enough to execute without re-rea
 
 ## P2 — Dashboard (home page)
 
-- [ ] **Build a real dashboard at `/`** — replace the current redirect with a summary view
-  - "At a glance" metrics: clip count, company count, thesis count, founder count
-  - Recent activity feed: last 5 clips + last 3 companies updated
-  - Quick-add clip button inline
-  - Thesis confidence distribution (simple bar or text breakdown)
-  - "What to do next" prompt based on stalest company (longest since update)
+- [x] Build real dashboard — metrics, recent clips, companies, theses, onboarding checklist
+- [ ] **Polish all inner pages** — Feed, Companies, Founders, Theses detail pages need the same design pass
+  - Use consistent `max-w-5xl` width (currently `max-w-2xl` / `max-w-3xl`)
+  - Apply colored source/status badges to feed clips and company lists
+  - Better empty states on all pages
 
 ---
 
