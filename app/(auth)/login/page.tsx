@@ -110,15 +110,6 @@ function LoginForm() {
           )}
         </div>
 
-        <div className="mt-6 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-center">
-          <p className="text-xs text-[var(--muted)]">Exploring the product?</p>
-          <a
-            href="/dashboard"
-            className="mt-1 block text-sm font-medium text-[var(--accent)] hover:underline"
-          >
-            Enter without an account →
-          </a>
-        </div>
       </div>
     </div>
   );
