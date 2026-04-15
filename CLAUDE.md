@@ -12,7 +12,7 @@ Every signal — a tweet, article, conversation, thought — gets captured, tagg
 
 **Pipeline:** Signal → Thesis → Deal
 
-**Live app:** https://venture-omnidash-hdsn02spu-steenjennings-2672s-projects.vercel.app
+**Live app:** https://venture-omnidash.vercel.app
 **Repo:** https://github.com/SteenJennings/venture-omnidash
 **Stack:** Next.js 15 (App Router, no src/ dir), Supabase, Tailwind, TypeScript, Gemini API, Vercel
 
