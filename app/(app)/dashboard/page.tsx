@@ -62,11 +62,11 @@ export default async function DashboardPage() {
 
       {/* ── Stat strip ─────────────────────────────────────────── */}
       <div className="grid grid-cols-5 divide-x divide-[var(--border-subtle)] border-b border-[var(--border-subtle)]">
-        <StatCell label="Clips" value={clipCount ?? 0} href="/feed" />
+        <StatCell label="Clips" value={clipCount ?? 0} href="/feed" first />
         <StatCell label="Companies" value={companyCount ?? 0} href="/companies" />
         <StatCell label="Active Deals" value={dealCount ?? 0} href="/deals" accent />
         <StatCell label="Theses" value={thesisCount ?? 0} href="/theses" />
-        <StatCell label="Founders" value={founderCount ?? 0} href="/founders" />
+        <StatCell label="Founders" value={founderCount ?? 0} href="/founders" last />
       </div>
 
       {/* ── Alert ──────────────────────────────────────────────── */}
@@ -95,7 +95,7 @@ export default async function DashboardPage() {
           <div className="grid flex-1 grid-cols-[1fr_320px] divide-x divide-[var(--border-subtle)]">
 
             {/* Left — signal feed */}
-            <div className="min-w-0 px-6 py-6">
+            <div className="min-w-0 px-8 py-8">
               <SectionHeader title="Recent signals" href="/feed" cta="View all" />
               {clips.length === 0 ? (
                 <BlankSlate message="No signals captured yet." cta="Add your first clip" href="/feed" />
@@ -112,7 +112,7 @@ export default async function DashboardPage() {
             <div className="flex flex-col divide-y divide-[var(--border-subtle)]">
 
               {/* Companies */}
-              <div className="px-5 py-6">
+              <div className="px-6 py-6 pr-8">
                 <SectionHeader title="Companies" href="/companies" cta="View all" />
                 {companies.length === 0 ? (
                   <BlankSlate message="No companies tracked." cta="Add one" href="/companies" />
@@ -134,7 +134,7 @@ export default async function DashboardPage() {
               </div>
 
               {/* Theses */}
-              <div className="px-5 py-6">
+              <div className="px-6 py-6 pr-8">
                 <SectionHeader title="Theses" href="/theses" cta="View all" />
                 {theses.length === 0 ? (
                   <BlankSlate message="No theses yet." cta="Add one" href="/theses" />
@@ -156,7 +156,7 @@ export default async function DashboardPage() {
               </div>
 
               {/* Founders */}
-              <div className="px-5 py-6">
+              <div className="px-6 py-6 pr-8">
                 <SectionHeader title="Founders" href="/founders" cta="View all" />
                 <p className="mt-2 text-[12px] text-[var(--muted)]">
                   {(founderCount ?? 0) > 0
@@ -179,11 +179,13 @@ export default async function DashboardPage() {
 
 /* ── Components ─────────────────────────────────────────────────────────── */
 
-function StatCell({ label, value, href, accent }: { label: string; value: number; href: string; accent?: boolean }) {
+function StatCell({ label, value, href, accent, first, last }: { label: string; value: number; href: string; accent?: boolean; first?: boolean; last?: boolean }) {
   return (
     <Link
       href={href}
-      className={`group flex flex-col px-8 py-5 transition-colors ${
+      className={`group flex flex-col py-5 transition-colors ${
+        first ? "pl-8 pr-6" : last ? "pl-6 pr-8" : "px-6"
+      } ${
         accent
           ? "bg-[var(--accent-glow)] hover:bg-amber-950/30"
           : "hover:bg-white/[0.02]"

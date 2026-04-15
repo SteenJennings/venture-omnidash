@@ -50,43 +50,65 @@ function LoginForm() {
   }
 
   return (
-    <div className="relative flex min-h-full flex-col items-center justify-center overflow-hidden bg-[var(--bg)] px-4">
-      {/* Ambient glow */}
+    <div className="relative flex min-h-full flex-col items-center justify-center overflow-hidden bg-[var(--bg)]">
+
+      {/* Background grid */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
-          background:
-            "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(245,158,11,0.07) 0%, transparent 70%)",
+          backgroundImage: `
+            linear-gradient(var(--border-subtle) 1px, transparent 1px),
+            linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px)
+          `,
+          backgroundSize: "48px 48px",
+          maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)",
         }}
       />
 
-      <div className="relative z-10 w-full max-w-[360px]">
-        {/* Logo */}
+      {/* Top amber glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: "radial-gradient(ellipse 50% 35% at 50% 0%, rgba(245,158,11,0.12) 0%, transparent 70%)",
+        }}
+      />
+
+      <div className="relative z-10 w-full max-w-[400px] px-4">
+
+        {/* Brand */}
         <div className="mb-10 text-center">
-          <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)] text-sm font-bold text-black shadow-lg shadow-amber-500/20">
+          <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--accent)] text-[13px] font-bold text-black shadow-xl shadow-amber-500/25">
             VS
           </div>
-          <h1 className="text-xl font-semibold tracking-tight text-[var(--text)]">
+          <h1 className="text-[22px] font-semibold tracking-tight text-[var(--text)]">
             Venture Signal
           </h1>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            Deal flow intelligence
+          <p className="mt-2 text-[13px] leading-relaxed text-[var(--muted)]">
+            Your personal research OS for early-stage investing.<br />
+            Signals → Theses → Conviction.
           </p>
         </div>
 
         {/* Card */}
-        <div
-          className="rounded-2xl border border-[var(--border)] p-6"
-          style={{ background: "var(--surface)" }}
-        >
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-7 shadow-2xl shadow-black/60">
           {sent ? (
-            <div className="py-4 text-center">
-              <div className="mb-3 text-2xl">✉️</div>
-              <p className="text-sm font-medium text-[var(--text)]">Check your inbox</p>
-              <p className="mt-1 text-xs text-[var(--muted)]">
-                Magic link sent to <span className="text-[var(--text)]">{email}</span>
+            <div className="py-6 text-center">
+              <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-lg">
+                ✉
+              </div>
+              <p className="text-[14px] font-semibold text-[var(--text)]">Check your inbox</p>
+              <p className="mt-2 text-[13px] text-[var(--muted)]">
+                Magic link sent to{" "}
+                <span className="font-medium text-[var(--text)]">{email}</span>
               </p>
+              <button
+                onClick={() => setSent(false)}
+                className="mt-5 text-[12px] text-[var(--muted)] underline-offset-2 hover:text-[var(--text)] hover:underline"
+              >
+                Use a different address
+              </button>
             </div>
           ) : (
             <>
@@ -94,32 +116,32 @@ function LoginForm() {
               <button
                 onClick={handleGoogleLogin}
                 disabled={loading}
-                className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] px-4 py-2.5 text-sm font-medium text-[var(--text)] transition-all duration-150 hover:border-[var(--border)]/80 hover:bg-white/[0.04] disabled:opacity-40"
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] px-4 py-3 text-[13px] font-medium text-[var(--text)] transition-all hover:border-white/10 hover:bg-white/[0.05] active:scale-[0.98] disabled:opacity-40"
               >
                 <GoogleIcon />
                 Continue with Google
               </button>
 
-              <div className="my-5 flex items-center gap-3">
+              <div className="my-6 flex items-center gap-3">
                 <div className="h-px flex-1 bg-[var(--border)]" />
-                <span className="text-[11px] font-medium uppercase tracking-widest text-[var(--muted-2)]">or</span>
+                <span className="text-[11px] font-semibold uppercase tracking-widest text-[var(--muted-2)]">or</span>
                 <div className="h-px flex-1 bg-[var(--border)]" />
               </div>
 
               {/* Magic link */}
-              <form onSubmit={handleMagicLink} className="space-y-2.5">
+              <form onSubmit={handleMagicLink} className="space-y-3">
                 <input
                   type="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3.5 py-2.5 text-sm text-[var(--text)] placeholder:text-[var(--muted-2)] transition-colors focus:border-[var(--accent)]/50 focus:outline-none"
+                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[13px] text-[var(--text)] placeholder:text-[var(--muted-2)] transition-colors focus:border-[var(--accent)]/60 focus:outline-none"
                 />
                 <button
                   type="submit"
                   disabled={loading || !email}
-                  className="w-full rounded-lg bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-black transition-all duration-150 hover:brightness-110 disabled:opacity-40"
+                  className="w-full rounded-xl bg-[var(--accent)] px-4 py-3 text-[13px] font-semibold text-black shadow-lg shadow-amber-500/20 transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-40"
                 >
                   {loading ? "Sending…" : "Send magic link"}
                 </button>
@@ -128,12 +150,15 @@ function LoginForm() {
           )}
 
           {error && (
-            <p className="mt-4 text-center text-xs text-red-400">{error}</p>
+            <p className="mt-4 rounded-lg border border-red-900/30 bg-red-950/20 px-3 py-2 text-center text-[12px] text-red-400">
+              {error}
+            </p>
           )}
         </div>
 
-        <p className="mt-5 text-center text-xs text-[var(--muted)]">
-          Your data stays yours. No tracking, no ads.
+        {/* Footer */}
+        <p className="mt-6 text-center text-[11px] leading-relaxed text-[var(--muted-2)]">
+          Your data stays yours.&nbsp; No tracking, no ads.
         </p>
       </div>
     </div>
@@ -145,7 +170,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="flex min-h-full items-center justify-center bg-[var(--bg)]">
-          <div className="h-8 w-8 rounded-xl bg-[var(--accent)] opacity-50" />
+          <div className="h-12 w-12 rounded-2xl bg-[var(--accent)] opacity-30" />
         </div>
       }
     >
