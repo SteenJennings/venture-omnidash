@@ -177,7 +177,7 @@ function StageColumn({
   );
 
   return (
-    <div className="flex min-h-48 flex-col rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
+    <div className="flex min-h-64 flex-col rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-[12px] font-semibold uppercase tracking-widest text-[var(--muted)]">
           {STAGE_LABELS[stage]}
@@ -246,7 +246,9 @@ function StageColumn({
       </ul>
 
       {deals.length === 0 && !isAdding && (
-        <p className="text-xs text-[var(--muted)]/40 italic">No deals</p>
+        <div className="flex flex-1 flex-col items-center justify-center py-6">
+          <p className="text-xs text-[var(--muted)]/60">No deals yet</p>
+        </div>
       )}
     </div>
   );

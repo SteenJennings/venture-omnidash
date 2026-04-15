@@ -77,6 +77,9 @@ function LoginForm() {
 
       <div className="relative z-10 w-full max-w-[400px] px-4">
 
+        {/* Card */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 px-8 py-10 shadow-2xl shadow-black/50 backdrop-blur-sm">
+
         {/* Brand */}
         <div className="mb-10 text-center">
           <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--accent)] text-[13px] font-bold text-black shadow-xl shadow-amber-500/25">
@@ -158,6 +161,8 @@ function LoginForm() {
         <p className="mt-8 text-center text-[11px] text-[var(--muted-2)]">
           Your data stays yours. No tracking, no ads.
         </p>
+
+        </div>{/* /card */}
       </div>
     </div>
   );
