@@ -43,18 +43,18 @@ export default async function DashboardPage() {
     : 0;
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-8">
+    <div className="mx-auto max-w-3xl px-8 py-10">
       {/* Header */}
       <div className="mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-lg font-semibold text-[var(--text)]">Dashboard</h1>
-          <p className="text-sm text-[var(--muted)]">Your research at a glance</p>
+          <h1 className="text-base font-semibold tracking-tight text-[var(--text)]">Dashboard</h1>
+          <p className="mt-0.5 text-sm text-[var(--muted)]">Your research at a glance</p>
         </div>
         <AddClipButton />
       </div>
 
       {/* Stats grid */}
-      <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-5">
+      <div className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-5">
         <StatCard label="Clips" value={clipCount ?? 0} href="/feed" />
         <StatCard label="Companies" value={companyCount ?? 0} href="/companies" />
         <StatCard label="Active Deals" value={dealCount ?? 0} href="/deals" accent />
@@ -66,25 +66,25 @@ export default async function DashboardPage() {
         {/* Recent clips */}
         <section>
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-xs font-medium uppercase tracking-widest text-[var(--muted)]">
+            <h2 className="text-[11px] font-medium uppercase tracking-widest text-[var(--muted)]">
               Recent clips
             </h2>
-            <Link href="/feed" className="text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors">
+            <Link href="/feed" className="text-[11px] text-[var(--muted)] transition-colors hover:text-[var(--accent)]">
               View all →
             </Link>
           </div>
           {clips.length === 0 ? (
             <EmptyCard message="No clips yet." cta="Add your first clip" href="/feed" />
           ) : (
-            <ul className="space-y-2">
+            <ul className="space-y-1.5">
               {clips.map((clip) => (
-                <li key={clip.id} className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
-                  <p className="line-clamp-2 text-xs text-[var(--text)]">{clip.note}</p>
-                  <div className="mt-1.5 flex items-center gap-2">
-                    <span className="rounded bg-[var(--border)] px-1.5 py-0.5 text-xs text-[var(--muted)]">
+                <li key={clip.id} className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 transition-colors hover:border-[var(--border)]/80">
+                  <p className="line-clamp-2 text-[13px] leading-relaxed text-[var(--text)]">{clip.note}</p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="rounded-md bg-[var(--border-subtle)] px-1.5 py-0.5 text-[11px] text-[var(--muted)]">
                       {clip.source_type}
                     </span>
-                    <span className="text-xs text-[var(--muted)]">
+                    <span className="text-[11px] text-[var(--muted)]">
                       {new Date(clip.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                     </span>
                   </div>
@@ -99,25 +99,25 @@ export default async function DashboardPage() {
           {/* Recent companies */}
           <section>
             <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-xs font-medium uppercase tracking-widest text-[var(--muted)]">
+              <h2 className="text-[11px] font-medium uppercase tracking-widest text-[var(--muted)]">
                 Companies
               </h2>
-              <Link href="/companies" className="text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors">
+              <Link href="/companies" className="text-[11px] text-[var(--muted)] transition-colors hover:text-[var(--accent)]">
                 View all →
               </Link>
             </div>
             {companies.length === 0 ? (
               <EmptyCard message="No companies yet." cta="Add one" href="/companies" />
             ) : (
-              <ul className="space-y-2">
+              <ul className="space-y-1.5">
                 {companies.slice(0, 3).map((company) => (
                   <li key={company.id}>
                     <Link
                       href={`/companies/${company.id}`}
-                      className="flex items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 hover:border-[var(--accent)]/40 transition-colors"
+                      className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 transition-all duration-150 hover:border-[var(--accent)]/30 hover:bg-[var(--accent-glow)]"
                     >
-                      <span className="text-xs font-medium text-[var(--text)]">{company.name}</span>
-                      <span className="rounded bg-[var(--border)] px-1.5 py-0.5 text-xs text-[var(--muted)]">
+                      <span className="text-[13px] font-medium text-[var(--text)]">{company.name}</span>
+                      <span className="rounded-md bg-[var(--border-subtle)] px-1.5 py-0.5 text-[11px] text-[var(--muted)]">
                         {company.status ?? "tracking"}
                       </span>
                     </Link>
@@ -131,19 +131,19 @@ export default async function DashboardPage() {
           {theses.length > 0 && (
             <section>
               <div className="mb-3 flex items-center justify-between">
-                <h2 className="text-xs font-medium uppercase tracking-widest text-[var(--muted)]">
+                <h2 className="text-[11px] font-medium uppercase tracking-widest text-[var(--muted)]">
                   Top theses
                 </h2>
-                <Link href="/theses" className="text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors">
+                <Link href="/theses" className="text-[11px] text-[var(--muted)] transition-colors hover:text-[var(--accent)]">
                   View all →
                 </Link>
               </div>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5">
                 {theses.slice(0, 3).map((thesis) => (
                   <li key={thesis.id}>
                     <Link
                       href={`/theses/${thesis.id}`}
-                      className="flex items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 hover:border-[var(--accent)]/40 transition-colors"
+                      className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 transition-all duration-150 hover:border-[var(--accent)]/30 hover:bg-[var(--accent-glow)]"
                     >
                       <span className="truncate text-xs font-medium text-[var(--text)]">{thesis.title}</span>
                       {thesis.confidence !== null && (
@@ -178,9 +178,9 @@ export default async function DashboardPage() {
 
       {/* Getting started (empty state) */}
       {(clipCount ?? 0) === 0 && (
-        <div className="mt-8 rounded-lg border border-dashed border-[var(--border)] p-8">
-          <h2 className="mb-4 text-sm font-medium text-[var(--text)]">Getting started</h2>
-          <ol className="space-y-3 text-sm text-[var(--muted)]">
+        <div className="mt-8 rounded-2xl border border-dashed border-[var(--border)] p-8">
+          <h2 className="mb-4 text-[13px] font-semibold tracking-tight text-[var(--text)]">Getting started</h2>
+          <ol className="space-y-3 text-[13px] text-[var(--muted)]">
             <li className="flex gap-3">
               <span className="font-mono text-[var(--accent)]">1.</span>
               <span>
@@ -215,23 +215,25 @@ function StatCard({ label, value, href, accent }: { label: string; value: number
   return (
     <Link
       href={href}
-      className={`rounded-lg border px-4 py-4 transition-colors ${
+      className={`group rounded-xl border px-4 py-4 transition-all duration-150 ${
         accent
-          ? "border-[var(--accent)]/30 bg-[var(--accent)]/5 hover:border-[var(--accent)]/50"
-          : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)]/40"
+          ? "border-[var(--accent)]/20 bg-[var(--accent-glow)] hover:border-[var(--accent)]/40 hover:bg-[var(--accent-dim)]"
+          : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border)]/80 hover:bg-[var(--surface-raised)]"
       }`}
     >
-      <p className={`text-2xl font-semibold ${accent ? "text-[var(--accent)]" : "text-[var(--text)]"}`}>{value}</p>
-      <p className="mt-0.5 text-xs text-[var(--muted)]">{label}</p>
+      <p className={`text-2xl font-semibold tracking-tight ${accent ? "text-[var(--accent)]" : "text-[var(--text)]"}`}>
+        {value}
+      </p>
+      <p className="mt-1 text-[11px] text-[var(--muted)]">{label}</p>
     </Link>
   );
 }
 
 function EmptyCard({ message, cta, href }: { message: string; cta: string; href: string }) {
   return (
-    <div className="rounded-lg border border-dashed border-[var(--border)] px-4 py-6 text-center">
-      <p className="text-xs text-[var(--muted)]">{message}</p>
-      <Link href={href} className="mt-1 block text-xs text-[var(--accent)] hover:underline">
+    <div className="rounded-xl border border-dashed border-[var(--border)] px-4 py-6 text-center">
+      <p className="text-[13px] text-[var(--muted)]">{message}</p>
+      <Link href={href} className="mt-1.5 inline-block text-[13px] text-[var(--accent)] hover:underline">
         {cta}
       </Link>
     </div>

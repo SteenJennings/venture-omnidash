@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 
 export default function AddThesisButton() {
   const [open, setOpen] = useState(false);
@@ -14,7 +13,7 @@ export default function AddThesisButton() {
         onClick={() => setOpen(true)}
         className="rounded-md bg-[var(--accent)] px-3 py-1.5 text-sm font-medium text-black transition-opacity hover:opacity-90"
       >
-        + Add thesis
+        + New thesis
       </button>
 
       {open && (
@@ -37,7 +36,6 @@ function AddThesisModal({
   onClose: () => void;
   onSuccess: () => void;
 }) {
-  const supabase = createClient();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [confidence, setConfidence] = useState(50);
@@ -56,30 +54,25 @@ function AddThesisModal({
     setLoading(true);
     setError(null);
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      setError("Not authenticated");
+    try {
+      const res = await fetch("/api/theses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title.trim(),
+          description: description.trim() || null,
+          confidence,
+        }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error((body as { error?: string }).error ?? "Failed to save");
+      }
+      onSuccess();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
       setLoading(false);
-      return;
     }
-
-    const { error: insertError } = await supabase.from("theses").insert({
-      user_id: user.id,
-      title: title.trim(),
-      description: description.trim() || null,
-      confidence,
-    });
-
-    if (insertError) {
-      setError(insertError.message);
-      setLoading(false);
-      return;
-    }
-
-    onSuccess();
   }
 
   return (
@@ -90,14 +83,8 @@ function AddThesisModal({
     >
       <div className="w-full max-w-md rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xl">
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-[var(--text)]">
-            New thesis
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-[var(--muted)] hover:text-[var(--text)]"
-            aria-label="Close"
-          >
+          <h2 className="text-sm font-semibold text-[var(--text)]">New thesis</h2>
+          <button onClick={onClose} className="text-[var(--muted)] hover:text-[var(--text)]" aria-label="Close">
             ✕
           </button>
         </div>
@@ -113,16 +100,15 @@ function AddThesisModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              autoFocus
               className="w-full rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="mb-1.5 block text-xs text-[var(--muted)]">
-              Description
-            </label>
+            <label className="mb-1.5 block text-xs text-[var(--muted)]">Description</label>
             <textarea
-              placeholder="Expand on the thesis..."
+              placeholder="What's the core bet? What would have to be true? What's the bear case?"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
@@ -132,10 +118,8 @@ function AddThesisModal({
 
           <div>
             <div className="mb-2 flex items-center justify-between">
-              <label className="text-xs text-[var(--muted)]">Confidence</label>
-              <span className="text-xs font-medium text-[var(--accent)]">
-                {confidence}%
-              </span>
+              <label className="text-xs text-[var(--muted)]">Conviction level</label>
+              <span className="text-xs font-medium text-[var(--accent)]">{confidence}%</span>
             </div>
             <input
               type="range"
@@ -148,18 +132,14 @@ function AddThesisModal({
             />
             <div className="mt-1 flex justify-between text-xs text-[var(--muted)]">
               <span>Exploratory</span>
-              <span>Convicted</span>
+              <span>High conviction</span>
             </div>
           </div>
 
           {error && <p className="text-xs text-red-400">{error}</p>}
 
           <div className="flex justify-end gap-3 pt-1">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-md px-4 py-2 text-sm text-[var(--muted)] hover:text-[var(--text)]"
-            >
+            <button type="button" onClick={onClose} className="rounded-md px-4 py-2 text-sm text-[var(--muted)] hover:text-[var(--text)]">
               Cancel
             </button>
             <button

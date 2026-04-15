@@ -8,7 +8,6 @@ export default async function AppLayout({
 }) {
   let email = "";
 
-  // Try to get the real user if there's a session, but don't enforce auth
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -22,41 +21,41 @@ export default async function AppLayout({
   return (
     <div className="flex h-full bg-[var(--bg)]">
       {/* Sidebar */}
-      <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border)] bg-[var(--surface)]">
+      <aside className="flex w-52 shrink-0 flex-col border-r border-[var(--border-subtle)] bg-[var(--surface)]">
         {/* Logo */}
-        <div className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-5">
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[var(--accent)] text-xs font-bold text-black tracking-tight">
+        <div className="flex items-center gap-3 px-4 py-5">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)] text-[11px] font-bold text-black shadow-md shadow-amber-500/20">
             VS
           </div>
           <div>
-            <p className="text-sm font-semibold leading-tight text-[var(--text)]">Venture Signal</p>
-            <p className="text-[10px] text-[var(--muted)] leading-tight">Deal flow intelligence</p>
+            <p className="text-[13px] font-semibold leading-tight tracking-tight text-[var(--text)]">Venture Signal</p>
+            <p className="text-[10px] leading-tight text-[var(--muted)]">Deal flow intelligence</p>
           </div>
         </div>
 
-        {/* Nav links */}
-        <nav className="flex-1 px-3 py-4">
+        {/* Nav */}
+        <nav className="flex-1 px-2 py-2">
           <NavLinks />
         </nav>
 
         {/* User */}
-        <div className="border-t border-[var(--border)] px-4 py-4">
+        <div className="border-t border-[var(--border-subtle)] px-3 py-3">
           {email ? (
-            <>
+            <div className="rounded-lg p-2">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--border)] text-[10px] font-semibold text-[var(--text)]">
+                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--accent-dim)] text-[10px] font-semibold text-[var(--accent)]">
                   {initials}
                 </div>
-                <span className="truncate text-xs text-[var(--muted)]" title={email}>
+                <span className="truncate text-[11px] text-[var(--muted)]" title={email}>
                   {email}
                 </span>
               </div>
               <SignOutButton />
-            </>
+            </div>
           ) : (
             <a
               href="/login"
-              className="block text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors"
+              className="block rounded-lg px-2 py-2 text-xs text-[var(--muted)] transition-colors hover:text-[var(--accent)]"
             >
               Sign in →
             </a>
@@ -64,7 +63,7 @@ export default async function AppLayout({
         </div>
       </aside>
 
-      {/* Main content */}
+      {/* Main */}
       <main className="flex-1 overflow-auto">{children}</main>
     </div>
   );
@@ -75,7 +74,7 @@ function SignOutButton() {
     <form action="/auth/signout" method="POST">
       <button
         type="submit"
-        className="mt-3 w-full rounded px-3 py-1.5 text-left text-xs text-[var(--muted)] transition-colors hover:text-[var(--text)]"
+        className="mt-2 w-full rounded-md px-2 py-1 text-left text-[11px] text-[var(--muted)] transition-colors hover:text-red-400"
       >
         Sign out
       </button>
