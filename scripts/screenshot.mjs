@@ -1,15 +1,30 @@
 /**
  * Takes screenshots of all key pages for visual design review.
- * Usage: node scripts/screenshot.mjs [page]
- * Pages: dashboard, feed, companies, theses, founders, deals, login
+ *
+ * Modes:
+ *   node scripts/screenshot.mjs              → localhost (no auth needed)
+ *   node scripts/screenshot.mjs --prod       → venture-omnidash.vercel.app (needs saved auth)
+ *   node scripts/screenshot.mjs --prod feed  → prod, single page
+ *   node scripts/screenshot.mjs feed         → localhost, single page
+ *
+ * Auth: run `node scripts/save-auth.mjs` once to save your Vercel session.
  */
 import { chromium } from "playwright";
-import { writeFileSync, mkdirSync } from "fs";
+import { writeFileSync, mkdirSync, existsSync } from "fs";
 import { join } from "path";
 
-const BASE = "http://localhost:3000";
+const args = process.argv.slice(2);
+const PROD = args.includes("--prod");
+const BASE = PROD ? "https://venture-omnidash.vercel.app" : "http://localhost:3000";
+const AUTH_FILE = "./scripts/auth-state.json";
 const OUT = "./scripts/screenshots";
+
 mkdirSync(OUT, { recursive: true });
+
+if (PROD && !existsSync(AUTH_FILE)) {
+  console.error("No auth session found. Run: node scripts/save-auth.mjs");
+  process.exit(1);
+}
 
 const PAGES = [
   { name: "dashboard", path: "/dashboard" },
@@ -21,17 +36,33 @@ const PAGES = [
   { name: "login", path: "/login" },
 ];
 
-const target = process.argv[2];
+// Allow filtering by page name (skip --prod flag)
+const target = args.find(a => !a.startsWith("--"));
 const pages = target ? PAGES.filter(p => p.name === target) : PAGES;
 
 const browser = await chromium.launch();
-const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+const ctxOptions = {
+  // Match a typical 14" MacBook Pro at 100% zoom
+  viewport: { width: 1440, height: 900 },
+};
+if (PROD && existsSync(AUTH_FILE)) {
+  ctxOptions.storageState = AUTH_FILE;
+}
+
+const ctx = await browser.newContext(ctxOptions);
 const page = await ctx.newPage();
 
 for (const { name, path } of pages) {
   await page.goto(`${BASE}${path}`, { waitUntil: "networkidle" });
-  await page.waitForTimeout(500);
-  const file = join(OUT, `${name}.png`);
+  await page.waitForTimeout(600);
+
+  // If we were redirected to login (auth expired), bail with a clear message
+  if (PROD && page.url().includes("/login") && path !== "/login") {
+    console.warn(`⚠ ${name} → redirected to login. Re-run: node scripts/save-auth.mjs`);
+    continue;
+  }
+
+  const file = join(OUT, `${name}${PROD ? "-prod" : ""}.png`);
   await page.screenshot({ path: file, fullPage: false });
   console.log(`✓ ${name} → ${file}`);
 }
