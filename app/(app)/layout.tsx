@@ -8,12 +8,16 @@ export default async function AppLayout({
 }) {
   let email = "";
 
-  try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    email = user?.email ?? "";
-  } catch {
-    // no session — that's fine
+  if (process.env.NODE_ENV === "development") {
+    email = "dev@local";
+  } else {
+    try {
+      const supabase = await createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      email = user?.email ?? "";
+    } catch {
+      // no session
+    }
   }
 
   const initials = email ? email.slice(0, 2).toUpperCase() : "VS";
@@ -21,7 +25,7 @@ export default async function AppLayout({
   return (
     <div className="flex h-full bg-[var(--bg)]">
       {/* Sidebar */}
-      <aside className="flex w-52 shrink-0 flex-col border-r border-[var(--border-subtle)] bg-[var(--surface)]">
+      <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border-subtle)] bg-[var(--surface)]">
         {/* Logo */}
         <div className="flex items-center gap-3 px-4 py-5">
           <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)] text-[11px] font-bold text-black shadow-md shadow-amber-500/20">

@@ -177,9 +177,9 @@ function StageColumn({
   );
 
   return (
-    <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4">
+    <div className="flex min-h-48 flex-col rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-xs font-medium text-[var(--text)]">
+        <h2 className="text-[12px] font-semibold uppercase tracking-widest text-[var(--muted)]">
           {STAGE_LABELS[stage]}
           {deals.length > 0 && (
             <span className="ml-1.5 text-[var(--muted)]">({deals.length})</span>

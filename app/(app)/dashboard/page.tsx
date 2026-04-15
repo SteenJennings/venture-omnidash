@@ -84,7 +84,7 @@ export default async function DashboardPage() {
       {/* ── Main content ───────────────────────────────────────── */}
       <div className="flex flex-1 flex-col">
         {isEmpty ? (
-          <div className="flex flex-1 items-start justify-center px-8 py-12">
+          <div className="flex flex-1 items-center justify-center px-8 py-12">
             <OnboardingChecklist
               clipCount={clipCount ?? 0}
               companyCount={companyCount ?? 0}
@@ -282,7 +282,7 @@ function OnboardingChecklist({ clipCount, companyCount, thesisCount }: { clipCou
   const doneCount = steps.filter((s) => s.done).length;
 
   return (
-    <div className="w-full max-w-xl rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
+    <div className="w-full max-w-2xl rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
       <div className="border-b border-[var(--border)] px-6 py-5 flex items-center justify-between">
         <div>
           <h2 className="text-[14px] font-semibold text-[var(--text)]">Get started</h2>

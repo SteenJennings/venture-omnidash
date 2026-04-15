@@ -19,28 +19,37 @@ export default async function CompaniesPage() {
   const items = (companies ?? []) as unknown as CompanyWithClipCount[];
 
   return (
-    <div className="px-8 py-8">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="flex min-h-full flex-col">
+      {/* Sticky header */}
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg)]/90 px-8 py-4 backdrop-blur-md">
         <div>
-          <h1 className="text-lg font-semibold text-[var(--text)]">Companies</h1>
-          <p className="text-sm text-[var(--muted)]">
-            {items.length} compan{items.length !== 1 ? "ies" : "y"} tracked
+          <h1 className="text-[15px] font-semibold tracking-tight text-[var(--text)]">Companies</h1>
+          <p className="mt-px text-[12px] text-[var(--muted)]">
+            {items.length > 0
+              ? `${items.length} compan${items.length !== 1 ? "ies" : "y"} tracked`
+              : "Startups you're watching, meeting, or have passed on"}
           </p>
         </div>
         <AddCompanyButton />
-      </div>
+      </header>
 
       {items.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-[var(--border)] p-12 text-center">
-          <p className="text-sm font-medium text-[var(--text)]">No companies tracked</p>
-          <p className="mt-2 text-xs leading-relaxed text-[var(--muted)]">
-            Track companies you&apos;re watching — startups that fit your thesis,<br />
-            ones you&apos;ve met, or names on your radar.
+        <div className="flex flex-1 flex-col items-center justify-center py-24 text-center">
+          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)] text-[22px]">
+            ⬡
+          </div>
+          <h2 className="text-[14px] font-semibold text-[var(--text)]">No companies tracked</h2>
+          <p className="mt-2 max-w-xs text-[13px] leading-relaxed text-[var(--muted)]">
+            Track companies you're watching — startups that fit your thesis, ones you've met, or names on your radar.
           </p>
-          <p className="mt-4 text-xs text-[var(--muted)]">Use <span className="text-[var(--accent)]">+ Add company</span> to get started.</p>
+          <div className="mt-6">
+            <AddCompanyButton />
+          </div>
         </div>
       ) : (
-        <CompaniesClient companies={items} />
+        <div className="flex-1 px-8 py-6">
+          <CompaniesClient companies={items} />
+        </div>
       )}
     </div>
   );

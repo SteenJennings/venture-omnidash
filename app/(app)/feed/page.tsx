@@ -18,32 +18,40 @@ export default async function FeedPage() {
   const items = (clips ?? []) as Clip[];
 
   return (
-    <div className="px-8 py-8">
-      {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
+    <div className="flex min-h-full flex-col">
+      {/* Sticky header */}
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg)]/90 px-8 py-4 backdrop-blur-md">
         <div>
-          <h1 className="text-lg font-semibold text-[var(--text)]">Feed</h1>
-          <p className="text-sm text-[var(--muted)]">
-            {items.length} clip{items.length !== 1 ? "s" : ""} · signals, observations, and market notes
+          <h1 className="text-[15px] font-semibold tracking-tight text-[var(--text)]">Feed</h1>
+          <p className="mt-px text-[12px] text-[var(--muted)]">
+            {items.length > 0
+              ? `${items.length} signal${items.length !== 1 ? "s" : ""} · signals, observations, market notes`
+              : "Your signal stream — tweets, articles, conversations, thoughts"}
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <ExportButton clips={items} />
+          {items.length > 0 && <ExportButton clips={items} />}
           <AddClipButton />
         </div>
-      </div>
+      </header>
 
       {items.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-[var(--border)] p-12 text-center">
-          <p className="text-sm font-medium text-[var(--text)]">No signals yet</p>
-          <p className="mt-2 text-xs leading-relaxed text-[var(--muted)]">
-            A clip is any signal worth remembering — a tweet, article,<br />
-            conversation, or raw thought about a company or market.
+        <div className="flex flex-1 flex-col items-center justify-center py-24 text-center">
+          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)] text-[22px]">
+            ◎
+          </div>
+          <h2 className="text-[14px] font-semibold text-[var(--text)]">No signals yet</h2>
+          <p className="mt-2 max-w-xs text-[13px] leading-relaxed text-[var(--muted)]">
+            A clip is any signal worth remembering — a tweet, article, conversation, or raw thought about a company or market.
           </p>
-          <p className="mt-4 text-xs text-[var(--muted)]">Use the <span className="text-[var(--accent)]">+ Add clip</span> button above to start.</p>
+          <div className="mt-6">
+            <AddClipButton />
+          </div>
         </div>
       ) : (
-        <FeedClient clips={items} />
+        <div className="flex-1 px-8 py-6">
+          <FeedClient clips={items} />
+        </div>
       )}
     </div>
   );

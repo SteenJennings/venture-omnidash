@@ -20,7 +20,6 @@ export default async function DealsPage() {
 
   const items = (deals ?? []) as unknown as DealWithCompany[];
 
-  // Fetch companies not already in a deal, for the add form
   const dealCompanyIds = items.map((d) => d.company_id);
   const { data: allCompanies } = await supabase
     .from("companies")
@@ -30,36 +29,35 @@ export default async function DealsPage() {
 
   const companies = (allCompanies ?? []) as Pick<Company, "id" | "name">[];
 
-  // Group by stage
   const grouped = STAGES.reduce<Record<Stage, DealWithCompany[]>>(
-    (acc, stage) => {
-      acc[stage] = items.filter((d) => d.stage === stage);
-      return acc;
-    },
+    (acc, stage) => { acc[stage] = items.filter((d) => d.stage === stage); return acc; },
     {} as Record<Stage, DealWithCompany[]>
   );
 
-  const activeDeals = items.filter(
-    (d) => d.stage !== "passed" && d.stage !== "invested"
-  );
+  const activeDeals = items.filter((d) => d.stage !== "passed" && d.stage !== "invested");
 
   return (
-    <div className="px-8 py-8">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="flex min-h-full flex-col">
+      {/* Sticky header */}
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg)]/90 px-8 py-4 backdrop-blur-md">
         <div>
-          <h1 className="text-lg font-semibold text-[var(--text)]">Deals</h1>
-          <p className="text-sm text-[var(--muted)]">
-            {activeDeals.length} active · {items.length} total · pipeline from sourced to invested
+          <h1 className="text-[15px] font-semibold tracking-tight text-[var(--text)]">Deals</h1>
+          <p className="mt-px text-[12px] text-[var(--muted)]">
+            {items.length > 0
+              ? `${activeDeals.length} active · ${items.length} total · sourced → invested`
+              : "Your deal pipeline from first contact to close"}
           </p>
         </div>
-      </div>
+      </header>
 
-      <DealsClient
-        grouped={grouped}
-        stages={[...STAGES]}
-        companies={companies}
-        dealCompanyIds={dealCompanyIds}
-      />
+      <div className="flex-1 px-8 py-6">
+        <DealsClient
+          grouped={grouped}
+          stages={[...STAGES]}
+          companies={companies}
+          dealCompanyIds={dealCompanyIds}
+        />
+      </div>
     </div>
   );
 }
