@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AddFounderButton() {
+export default function AddFounderButton({ variant = "cta" }: { variant?: "header" | "cta" }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -11,7 +11,11 @@ export default function AddFounderButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="rounded-md bg-[var(--accent)] px-3 py-1.5 text-sm font-medium text-black transition-opacity hover:opacity-90"
+        className={
+          variant === "header"
+            ? "rounded-md border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-2.5 py-1 text-[11px] font-medium text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20"
+            : "rounded-md bg-[var(--accent)] px-3 py-1.5 text-[12px] font-semibold text-black transition-opacity hover:opacity-90"
+        }
       >
         + Add founder
       </button>

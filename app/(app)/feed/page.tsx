@@ -31,7 +31,7 @@ export default async function FeedPage() {
         </div>
         <div className="flex items-center gap-2">
           {items.length > 0 && <ExportButton clips={items} />}
-          <AddClipButton />
+          <AddClipButton variant="header" />
         </div>
       </header>
 

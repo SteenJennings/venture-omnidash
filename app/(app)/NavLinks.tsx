@@ -70,7 +70,7 @@ export default function NavLinks() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className={`group relative flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] transition-all duration-150 ${
+                    className={`group relative flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] transition-all duration-150 ${
                       active
                         ? "bg-[var(--accent-dim)] font-medium text-[var(--text)]"
                         : "text-[var(--muted)] hover:bg-white/[0.03] hover:text-[var(--text)]"

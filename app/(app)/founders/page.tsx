@@ -28,7 +28,7 @@ export default async function FoundersPage() {
               : "People worth tracking across deals and time"}
           </p>
         </div>
-        <AddFounderButton />
+        <AddFounderButton variant="header" />
       </header>
 
       {items.length === 0 ? (

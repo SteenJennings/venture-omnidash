@@ -30,7 +30,7 @@ export default async function CompaniesPage() {
               : "Startups you're watching, meeting, or have passed on"}
           </p>
         </div>
-        <AddCompanyButton />
+        <AddCompanyButton variant="header" />
       </header>
 
       {items.length === 0 ? (

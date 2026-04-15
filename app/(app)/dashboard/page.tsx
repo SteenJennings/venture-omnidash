@@ -57,7 +57,7 @@ export default async function DashboardPage() {
               : `${clipCount ?? 0} signal${(clipCount ?? 0) !== 1 ? "s" : ""} · ${companyCount ?? 0} ${(companyCount ?? 0) !== 1 ? "companies" : "company"} · ${thesisCount ?? 0} ${(thesisCount ?? 0) !== 1 ? "theses" : "thesis"}`}
           </p>
         </div>
-        <AddClipButton />
+        <AddClipButton variant="header" />
       </header>
 
       {/* ── Stat strip ─────────────────────────────────────────── */}

@@ -9,7 +9,7 @@ type Founder = { id: string; name: string };
 
 const SOURCE_TYPES: SourceType[] = ["tweet", "article", "conversation", "thought"];
 
-export default function AddClipButton() {
+export default function AddClipButton({ variant = "cta" }: { variant?: "header" | "cta" }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -17,7 +17,11 @@ export default function AddClipButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="rounded-md bg-[var(--accent)] px-3 py-1.5 text-sm font-medium text-black transition-opacity hover:opacity-90"
+        className={
+          variant === "header"
+            ? "rounded-md border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-2.5 py-1 text-[11px] font-medium text-[var(--accent)] transition-all hover:bg-[var(--accent)]/20"
+            : "rounded-md bg-[var(--accent)] px-3 py-1.5 text-[12px] font-semibold text-black transition-opacity hover:opacity-90"
+        }
       >
         + Add clip
       </button>

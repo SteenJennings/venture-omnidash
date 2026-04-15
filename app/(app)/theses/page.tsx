@@ -28,7 +28,7 @@ export default async function ThesesPage() {
               : "Investment beliefs you want to build evidence for"}
           </p>
         </div>
-        <AddThesisButton />
+        <AddThesisButton variant="header" />
       </header>
 
       {items.length === 0 ? (
