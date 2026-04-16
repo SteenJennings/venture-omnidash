@@ -46,7 +46,7 @@ export default async function DashboardPage() {
     <div className="flex min-h-full flex-col">
 
       {/* ── Sticky top bar ─────────────────────────────────────── */}
-      <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg)]/80 px-8 py-4 backdrop-blur-md">
+      <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg)]/80 px-10 py-4 backdrop-blur-md">
         <div>
           <h1 className="text-[15px] font-semibold tracking-tight text-[var(--text)]">
             {handle ? `Good to see you, ${handle}.` : "Dashboard"}
@@ -71,7 +71,7 @@ export default async function DashboardPage() {
 
       {/* ── Alert ──────────────────────────────────────────────── */}
       {stalest && daysSince >= 7 && (
-        <div className="mx-6 mt-4 flex items-center justify-between rounded-lg border border-amber-800/25 bg-amber-950/30 px-4 py-2.5">
+        <div className="mx-10 mt-4 flex items-center justify-between rounded-lg border border-amber-800/25 bg-amber-950/30 px-4 py-2.5">
           <p className="text-[12px] text-amber-400/90">
             <span className="font-medium">{stalest.name}</span> hasn&apos;t been updated in {daysSince} days.
           </p>
@@ -84,7 +84,7 @@ export default async function DashboardPage() {
       {/* ── Main content ───────────────────────────────────────── */}
       <div className="flex flex-1 flex-col">
         {isEmpty ? (
-          <div className="flex flex-1 items-center justify-center px-8 py-12">
+          <div className="flex flex-1 items-center justify-center px-10 py-12">
             <OnboardingChecklist
               clipCount={clipCount ?? 0}
               companyCount={companyCount ?? 0}
@@ -95,7 +95,7 @@ export default async function DashboardPage() {
           <div className="grid flex-1 grid-cols-[1fr_360px] divide-x divide-[var(--border-subtle)]">
 
             {/* Left — signal feed */}
-            <div className="min-w-0 px-8 py-8">
+            <div className="min-w-0 px-10 py-8">
               <SectionHeader title="Recent signals" href="/feed" cta="View all" />
               {clips.length === 0 ? (
                 <BlankSlate message="No signals captured yet." cta="Add your first clip" href="/feed" />
@@ -112,7 +112,7 @@ export default async function DashboardPage() {
             <div className="flex flex-col divide-y divide-[var(--border-subtle)]">
 
               {/* Companies */}
-              <div className="px-6 py-6 pr-8">
+              <div className="px-6 py-6 pr-10">
                 <SectionHeader title="Companies" href="/companies" cta="View all" />
                 {companies.length === 0 ? (
                   <BlankSlate message="No companies tracked." cta="Add one" href="/companies" />
@@ -134,7 +134,7 @@ export default async function DashboardPage() {
               </div>
 
               {/* Theses */}
-              <div className="px-6 py-6 pr-8">
+              <div className="px-6 py-6 pr-10">
                 <SectionHeader title="Theses" href="/theses" cta="View all" />
                 {theses.length === 0 ? (
                   <BlankSlate message="No theses yet." cta="Add one" href="/theses" />
@@ -156,7 +156,7 @@ export default async function DashboardPage() {
               </div>
 
               {/* Founders */}
-              <div className="px-6 py-6 pr-8">
+              <div className="px-6 py-6 pr-10">
                 <SectionHeader title="Founders" href="/founders" cta="View all" />
                 <p className="mt-2 text-[12px] text-[var(--muted)]">
                   {(founderCount ?? 0) > 0
@@ -184,7 +184,7 @@ function StatCell({ label, value, href, accent, first, last }: { label: string; 
     <Link
       href={href}
       className={`group flex flex-col py-5 transition-colors ${
-        first ? "pl-8 pr-6" : last ? "pl-6 pr-8" : "px-6"
+        first ? "pl-10 pr-6" : last ? "pl-6 pr-10" : "px-6"
       } ${
         accent
           ? "bg-[var(--accent-glow)] hover:bg-amber-950/30"

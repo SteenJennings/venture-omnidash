@@ -21,7 +21,7 @@ export default async function CompaniesPage() {
   return (
     <div className="flex min-h-full flex-col">
       {/* Sticky header */}
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg)]/90 px-8 py-4 backdrop-blur-md">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg)]/90 px-10 py-4 backdrop-blur-md">
         <div>
           <h1 className="text-[15px] font-semibold tracking-tight text-[var(--text)]">Companies</h1>
           <p className="mt-px text-[12px] text-[var(--muted)]">
@@ -47,7 +47,7 @@ export default async function CompaniesPage() {
           </div>
         </div>
       ) : (
-        <div className="flex-1 px-8 py-6">
+        <div className="flex-1 px-10 py-6">
           <CompaniesClient companies={items} />
         </div>
       )}

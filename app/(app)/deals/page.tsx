@@ -39,7 +39,7 @@ export default async function DealsPage() {
   return (
     <div className="flex min-h-full flex-col">
       {/* Sticky header */}
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--border-subtle)] bg-[var(--bg)]/90 px-8 py-4 backdrop-blur-md">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg)]/90 px-10 py-4 backdrop-blur-md">
         <div>
           <h1 className="text-[15px] font-semibold tracking-tight text-[var(--text)]">Deals</h1>
           <p className="mt-px text-[12px] text-[var(--muted)]">
