@@ -49,6 +49,16 @@ const SECTIONS = [
       },
     ],
   },
+  {
+    label: "Me",
+    items: [
+      {
+        href: "/journal",
+        label: "Journal",
+        icon: <svg width="14" height="14" viewBox="0 0 15 15" fill="none" aria-hidden="true"><rect x="2" y="1" width="9" height="13" rx="1" stroke="currentColor" strokeWidth="1.2" fill="none"/><path d="M5 4h4M5 7h4M5 10h2" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/><path d="M11 5l2-2m0 0l-1 1m1-1v2" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/></svg>,
+      },
+    ],
+  },
 ];
 
 export default function NavLinks() {

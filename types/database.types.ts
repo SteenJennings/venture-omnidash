@@ -210,6 +210,49 @@ export interface Database {
         };
         Relationships: [];
       };
+      journal_entries: {
+        Row: {
+          id: string;
+          user_id: string;
+          /** outreach | meeting | event | learning | milestone | note */
+          entry_type: string;
+          title: string;
+          entry_date: string;
+          notes: string | null;
+          contact_name: string | null;
+          contact_company: string | null;
+          outcome: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          entry_type: string;
+          title: string;
+          entry_date: string;
+          notes?: string | null;
+          contact_name?: string | null;
+          contact_company?: string | null;
+          outcome?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          entry_type?: string;
+          title?: string;
+          entry_date?: string;
+          notes?: string | null;
+          contact_name?: string | null;
+          contact_company?: string | null;
+          outcome?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -224,3 +267,4 @@ export type Company = Database["public"]["Tables"]["companies"]["Row"];
 export type Founder = Database["public"]["Tables"]["founders"]["Row"];
 export type Thesis = Database["public"]["Tables"]["theses"]["Row"];
 export type Deal = Database["public"]["Tables"]["deals"]["Row"];
+export type JournalEntry = Database["public"]["Tables"]["journal_entries"]["Row"];

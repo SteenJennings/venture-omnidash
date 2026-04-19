@@ -17,6 +17,7 @@ export default async function DashboardPage() {
     { data: recentClips },
     { data: recentCompanies },
     { data: allTheses },
+    { data: recentJournal },
   ] = await Promise.all([
     supabase.from("clips").select("*", { count: "exact", head: true }).eq("user_id", uid),
     supabase.from("companies").select("*", { count: "exact", head: true }).eq("user_id", uid),
@@ -26,11 +27,14 @@ export default async function DashboardPage() {
     supabase.from("clips").select("*").eq("user_id", uid).order("created_at", { ascending: false }).limit(8),
     supabase.from("companies").select("*").eq("user_id", uid).order("updated_at", { ascending: false }).limit(6),
     supabase.from("theses").select("*").eq("user_id", uid).order("confidence", { ascending: false }),
+    supabase.from("journal_entries").select("id,entry_date,entry_type,title,contact_name,contact_company").eq("user_id", uid).order("entry_date", { ascending: false }).order("created_at", { ascending: false }).limit(4),
   ]);
 
   const clips = (recentClips ?? []) as Clip[];
   const companies = (recentCompanies ?? []) as Company[];
   const theses = (allTheses ?? []) as Thesis[];
+  type JournalPreview = { id: string; entry_date: string; entry_type: string; title: string; contact_name: string | null; contact_company: string | null };
+  const journal = (recentJournal ?? []) as JournalPreview[];
 
   const stalest = companies.length > 0
     ? [...companies].sort((a, b) => new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime())[0]
@@ -169,6 +173,28 @@ export default async function DashboardPage() {
                   </Link>
                 )}
               </div>
+
+              {/* Journal */}
+              <div className="px-6 py-6 pr-10">
+                <SectionHeader title="Journal" href="/journal" cta="View all" />
+                {journal.length === 0 ? (
+                  <BlankSlate message="No journal entries yet." cta="Log an activity" href="/journal" />
+                ) : (
+                  <ul className="mt-4 space-y-1">
+                    {journal.map((j) => (
+                      <li key={j.id}>
+                        <Link
+                          href="/journal"
+                          className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-white/[0.03]"
+                        >
+                          <JournalTypeDot type={j.entry_type} />
+                          <span className="truncate text-[13px] text-[var(--text)]">{j.title}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -235,6 +261,18 @@ function BlankSlate({ message, cta, href }: { message: string; cta: string; href
       </Link>
     </div>
   );
+}
+
+function JournalTypeDot({ type }: { type: string }) {
+  const dots: Record<string, string> = {
+    outreach: "bg-sky-400",
+    meeting: "bg-violet-400",
+    event: "bg-amber-400",
+    learning: "bg-emerald-400",
+    milestone: "bg-rose-400",
+    note: "bg-[var(--muted)]",
+  };
+  return <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${dots[type] ?? "bg-[var(--muted)]"}`} />;
 }
 
 function SourceBadge({ type }: { type: string }) {
