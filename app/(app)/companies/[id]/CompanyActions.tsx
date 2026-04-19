@@ -122,7 +122,7 @@ export default function CompanyActions({ company }: { company: Company }) {
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
+            className="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
           />
         </div>
         <div className="grid grid-cols-2 gap-3">
@@ -132,7 +132,7 @@ export default function CompanyActions({ company }: { company: Company }) {
               value={sector}
               onChange={(e) => setSector(e.target.value)}
               placeholder="B2B SaaS"
-              className="w-full rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
+              className="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
             />
           </div>
           <div>
@@ -140,7 +140,7 @@ export default function CompanyActions({ company }: { company: Company }) {
             <select
               value={stage}
               onChange={(e) => setStage(e.target.value)}
-              className="w-full rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
+              className="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
             >
               {STAGES.map((s) => (
                 <option key={s} value={s}>
@@ -155,7 +155,7 @@ export default function CompanyActions({ company }: { company: Company }) {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="w-full rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
+            className="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
           >
             {STATUSES.map((s) => (
               <option key={s} value={s}>
@@ -170,7 +170,7 @@ export default function CompanyActions({ company }: { company: Company }) {
             value={thesis}
             onChange={(e) => setThesis(e.target.value)}
             rows={3}
-            className="w-full resize-none rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
+            className="w-full resize-none rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
           />
         </div>
         <div>
@@ -180,7 +180,7 @@ export default function CompanyActions({ company }: { company: Company }) {
             onChange={(e) => setKeyUnknowns(e.target.value)}
             placeholder="What do you need to find out?"
             rows={2}
-            className="w-full resize-none rounded-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
+            className="w-full resize-none rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
           />
         </div>
         {error && <p className="text-xs text-red-400">{error}</p>}

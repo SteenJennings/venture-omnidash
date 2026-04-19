@@ -83,7 +83,7 @@ export default function FeedClient({ clips }: { clips: Clip[] }) {
             placeholder="Search signals…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-2 pl-9 pr-3 text-[13px] text-[var(--text)] placeholder:text-[var(--muted-2)] transition-colors focus:border-[var(--accent)]/50 focus:outline-none"
+            className="w-full rounded-lg border border-[var(--border-input)] bg-[var(--surface)] py-2 pl-9 pr-3 text-[13px] text-[var(--text)] placeholder:text-[var(--muted-2)] transition-colors focus:border-[var(--accent)]/50 focus:outline-none"
           />
         </div>
         {allTags.length > 0 && (
@@ -180,7 +180,7 @@ export default function FeedClient({ clips }: { clips: Clip[] }) {
                       <select
                         defaultValue=""
                         onChange={(e) => handleLinkThesis(clip.id, e.target.value)}
-                        className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--bg)] px-2 py-1.5 text-[12px] text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
+                        className="flex-1 rounded-lg border border-[var(--border-input)] bg-[var(--bg)] px-2 py-1.5 text-[12px] text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
                       >
                         <option value="" disabled>Select thesis…</option>
                         {theses.map((t) => (

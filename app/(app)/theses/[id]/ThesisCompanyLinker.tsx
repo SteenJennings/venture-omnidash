@@ -61,7 +61,7 @@ export default function ThesisCompanyLinker({
             defaultValue=""
             onChange={(e) => handleLink(e.target.value)}
             disabled={saving}
-            className="flex-1 rounded-md border border-[var(--border)] bg-[var(--bg)] px-2 py-1.5 text-xs text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
+            className="flex-1 rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-2 py-1.5 text-xs text-[var(--text)] focus:border-[var(--accent)] focus:outline-none"
           >
             <option value="" disabled>
               Select company…
