@@ -16,14 +16,6 @@
   --accent-glow: rgba(245, 158, 11, 0.06);
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 html,
 body,
 #__next {
