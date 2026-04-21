@@ -80,58 +80,32 @@ export default function DealsClient({
     router.refresh();
   }
 
-  const activeStages = stages.filter((s) => s !== "passed" && s !== "invested");
-  const closedStages = stages.filter((s) => s === "passed" || s === "invested");
-
   return (
-    <div className="space-y-8">
-      {/* Active pipeline */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        {activeStages.map((stage) => (
-          <StageColumn
-            key={stage}
-            stage={stage}
-            deals={grouped[stage] ?? []}
-            stages={stages}
-            companies={companies}
-            dealCompanyIds={dealCompanyIds}
-            addingToStage={addingToStage}
-            selectedCompany={selectedCompany}
-            nextAction={nextAction}
-            saving={saving}
-            onAddClick={() => { setAddingToStage(stage); setSelectedCompany(""); setNextAction(""); }}
-            onCancelAdd={() => setAddingToStage(null)}
-            onAdd={() => handleAdd(stage)}
-            onCompanySelect={setSelectedCompany}
-            onNextActionChange={setNextAction}
-            onStageChange={handleStageChange}
-            onDelete={handleDelete}
-          />
+    <div className="overflow-x-auto pb-2">
+      <div className="flex gap-4" style={{ minWidth: "max-content" }}>
+        {stages.map((stage) => (
+          <div key={stage} className="w-64 shrink-0">
+            <StageColumn
+              stage={stage}
+              deals={grouped[stage] ?? []}
+              stages={stages}
+              companies={companies}
+              dealCompanyIds={dealCompanyIds}
+              addingToStage={addingToStage}
+              selectedCompany={selectedCompany}
+              nextAction={nextAction}
+              saving={saving}
+              onAddClick={() => { setAddingToStage(stage); setSelectedCompany(""); setNextAction(""); }}
+              onCancelAdd={() => setAddingToStage(null)}
+              onAdd={() => handleAdd(stage)}
+              onCompanySelect={setSelectedCompany}
+              onNextActionChange={setNextAction}
+              onStageChange={handleStageChange}
+              onDelete={handleDelete}
+            />
+          </div>
         ))}
       </div>
-
-      {/* Closed deals */}
-      {closedStages.some((s) => (grouped[s] ?? []).length > 0) && (
-        <div>
-          <h2 className="mb-3 text-xs font-medium uppercase tracking-widest text-[var(--muted)]">
-            Closed
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {closedStages.map((stage) =>
-              (grouped[stage] ?? []).length > 0 ? (
-                <ClosedColumn
-                  key={stage}
-                  stage={stage}
-                  deals={grouped[stage] ?? []}
-                  stages={stages}
-                  onStageChange={handleStageChange}
-                  onDelete={handleDelete}
-                />
-              ) : null
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -254,39 +228,6 @@ function StageColumn({
   );
 }
 
-function ClosedColumn({
-  stage,
-  deals,
-  stages,
-  onStageChange,
-  onDelete,
-}: {
-  stage: string;
-  deals: DealWithCompany[];
-  stages: string[];
-  onStageChange: (id: string, stage: string) => void;
-  onDelete: (id: string) => void;
-}) {
-  return (
-    <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4">
-      <h2 className="mb-3 text-xs font-medium text-[var(--text)]">
-        {STAGE_LABELS[stage]}
-        <span className="ml-1.5 text-[var(--muted)]">({deals.length})</span>
-      </h2>
-      <ul className="space-y-2">
-        {deals.map((deal) => (
-          <DealCard
-            key={deal.id}
-            deal={deal}
-            stages={stages}
-            onStageChange={onStageChange}
-            onDelete={onDelete}
-          />
-        ))}
-      </ul>
-    </div>
-  );
-}
 
 function DealCard({
   deal,

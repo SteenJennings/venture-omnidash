@@ -56,6 +56,8 @@ export interface Database {
           status: string | null;
           thesis: string | null;
           key_unknowns: string | null;
+          website: string | null;
+          linkedin: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -68,6 +70,8 @@ export interface Database {
           status?: string | null;
           thesis?: string | null;
           key_unknowns?: string | null;
+          website?: string | null;
+          linkedin?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -80,6 +84,8 @@ export interface Database {
           status?: string | null;
           thesis?: string | null;
           key_unknowns?: string | null;
+          website?: string | null;
+          linkedin?: string | null;
           created_at?: string;
           updated_at?: string;
         };

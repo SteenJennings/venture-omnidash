@@ -21,6 +21,8 @@ export default function CompanyActions({ company }: { company: Company }) {
   const [status, setStatus] = useState(company.status ?? "tracking");
   const [thesis, setThesis] = useState(company.thesis ?? "");
   const [keyUnknowns, setKeyUnknowns] = useState(company.key_unknowns ?? "");
+  const [website, setWebsite] = useState(company.website ?? "");
+  const [linkedin, setLinkedin] = useState(company.linkedin ?? "");
 
   async function handleSave() {
     if (!name.trim()) return;
@@ -39,6 +41,8 @@ export default function CompanyActions({ company }: { company: Company }) {
             status,
             thesis: thesis.trim() || null,
             key_unknowns: keyUnknowns.trim() || null,
+            website: website.trim() || null,
+            linkedin: linkedin.trim() || null,
           }),
         }
       );
@@ -183,6 +187,26 @@ export default function CompanyActions({ company }: { company: Company }) {
             className="w-full resize-none rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
           />
         </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="mb-1 block text-xs text-[var(--muted)]">Website</label>
+            <input
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              placeholder="stripe.com"
+              className="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs text-[var(--muted)]">LinkedIn</label>
+            <input
+              value={linkedin}
+              onChange={(e) => setLinkedin(e.target.value)}
+              placeholder="linkedin.com/company/stripe"
+              className="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
+            />
+          </div>
+        </div>
         {error && <p className="text-xs text-red-400">{error}</p>}
         <div className="flex justify-end gap-3 pt-1">
           <button
@@ -195,6 +219,8 @@ export default function CompanyActions({ company }: { company: Company }) {
               setStatus(company.status ?? "tracking");
               setThesis(company.thesis ?? "");
               setKeyUnknowns(company.key_unknowns ?? "");
+              setWebsite(company.website ?? "");
+              setLinkedin(company.linkedin ?? "");
             }}
             className="rounded-md px-4 py-2 text-sm text-[var(--muted)] hover:text-[var(--text)]"
           >

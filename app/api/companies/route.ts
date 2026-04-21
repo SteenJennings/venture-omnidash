@@ -29,6 +29,8 @@ export async function POST(request: Request) {
     stage?: string | null;
     status?: string;
     thesis?: string | null;
+    website?: string | null;
+    linkedin?: string | null;
   };
 
   if (!b.name?.trim()) return NextResponse.json({ error: "name is required" }, { status: 400 });
@@ -42,6 +44,8 @@ export async function POST(request: Request) {
       stage: b.stage ?? null,
       status: b.status ?? "tracking",
       thesis: b.thesis ?? null,
+      website: b.website ?? null,
+      linkedin: b.linkedin ?? null,
     })
     .select()
     .single();
@@ -74,6 +78,8 @@ export async function PATCH(request: Request) {
     status?: string | null;
     thesis?: string | null;
     key_unknowns?: string | null;
+    website?: string | null;
+    linkedin?: string | null;
   };
 
   const { data, error } = await supabase
@@ -85,6 +91,8 @@ export async function PATCH(request: Request) {
       ...(b.status !== undefined && { status: b.status }),
       ...(b.thesis !== undefined && { thesis: b.thesis }),
       ...(b.key_unknowns !== undefined && { key_unknowns: b.key_unknowns }),
+      ...(b.website !== undefined && { website: b.website }),
+      ...(b.linkedin !== undefined && { linkedin: b.linkedin }),
     })
     .eq("id", id)
     .eq("user_id", uid)

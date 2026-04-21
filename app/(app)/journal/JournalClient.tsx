@@ -100,7 +100,7 @@ export default function JournalClient({ entries: initial }: { entries: JournalEn
               className={`rounded-full px-3 py-1 text-[11px] font-medium transition-all ${
                 filter === "all"
                   ? "bg-[var(--text)] text-[var(--bg)]"
-                  : "bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--text)]"
+                  : "border border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--border-input)] hover:text-[var(--text)]"
               }`}
             >
               All
@@ -112,7 +112,7 @@ export default function JournalClient({ entries: initial }: { entries: JournalEn
                 className={`rounded-full px-3 py-1 text-[11px] font-medium transition-all ${
                   filter === t
                     ? TYPE_META[t].color + " ring-1 ring-current/30"
-                    : "bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--text)]"
+                    : "border border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--border-input)] hover:text-[var(--text)]"
                 }`}
               >
                 {TYPE_META[t].label}
@@ -134,7 +134,7 @@ export default function JournalClient({ entries: initial }: { entries: JournalEn
                     return (
                       <div
                         key={entry.id}
-                        className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-5 py-4 transition-all hover:border-[var(--border-subtle)] hover:bg-[var(--surface-raised)]"
+                        className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-5 py-4 transition-all hover:border-[var(--border-input)] hover:bg-[var(--surface-raised)]"
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="min-w-0 flex-1">

@@ -48,6 +48,8 @@ function AddCompanyModal({
   const [stage, setStage] = useState("");
   const [status, setStatus] = useState("tracking");
   const [thesis, setThesis] = useState("");
+  const [website, setWebsite] = useState("");
+  const [linkedin, setLinkedin] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -73,6 +75,8 @@ function AddCompanyModal({
           stage: stage || null,
           status,
           thesis: thesis.trim() || null,
+          website: website.trim() || null,
+          linkedin: linkedin.trim() || null,
         }),
       });
       if (!res.ok) {
@@ -181,6 +185,29 @@ function AddCompanyModal({
               rows={3}
               className="w-full resize-none rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
             />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="mb-1.5 block text-xs text-[var(--muted)]">Website</label>
+              <input
+                type="text"
+                placeholder="stripe.com"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                className="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs text-[var(--muted)]">LinkedIn</label>
+              <input
+                type="text"
+                placeholder="linkedin.com/company/stripe"
+                value={linkedin}
+                onChange={(e) => setLinkedin(e.target.value)}
+                className="w-full rounded-md border border-[var(--border-input)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none"
+              />
+            </div>
           </div>
 
           {error && <p className="text-xs text-red-400">{error}</p>}

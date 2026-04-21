@@ -4,6 +4,38 @@ Work top-to-bottom. Each item is self-contained enough to execute without re-rea
 
 ---
 
+## ✅ Completed (session 6 — April 21, 2026)
+
+- [x] **Company logo via Clearbit** — `website` + `linkedin` columns added to `companies` table (migration applied); Clearbit logo API (`logo.clearbit.com/{domain}`) renders logo in company list rows and detail page header; letter-initial fallback when no website or logo not found
+- [x] **Company detail page links** — website (globe icon) + LinkedIn icon links shown in detail header when populated
+- [x] **Add/edit company forms** — Website + LinkedIn fields added to AddCompanyButton modal and CompanyActions edit form
+
+---
+
+## ✅ Completed (session 5 — April 18, 2026)
+
+- [x] **Fix deals kanban** — all 5 stages (Sourced → Invested) now in a single horizontal scrollable row; previously only 3 visible
+- [x] **Journal filter pill borders** — inactive filter pills now have `border-[var(--border)]`; hover brightens to `border-[var(--border-input)]`
+- [x] **Journal entry card hover direction** — hover now correctly brightens border (was going to `--border-subtle` which is darker)
+
+---
+
+## ✅ Completed (session 4 — April 18, 2026)
+
+- [x] **Root cause: Tailwind padding/margin broken app-wide** — Unlayered `* { padding: 0; margin: 0 }` CSS reset in globals.css was overriding all `@layer utilities` Tailwind classes (CSS cascade layers: unlayered beats layered). Removed the reset entirely; Tailwind's own Preflight handles this inside `@layer base`.
+- [x] **Add `--border-input` design token** — `#383838` for form field borders (previously fields used `--border: #2a2a2a` which was invisible against `--bg`)
+- [x] **Update all modal padding** — all Add* modals and JournalClient modal from `p-6` → `p-8`
+- [x] **Update all form input borders** — all inputs/selects/textareas across AddClipButton, AddCompanyButton, AddFounderButton, AddThesisButton, JournalClient, ThesisActions, ThesisCompanyLinker, FeedClient, FounderActions, CompanyActions changed to `border-[var(--border-input)]`
+- [x] **`journal_entries` TypeScript types** — added full table definition to `types/database.types.ts` and `JournalEntry` export; fixed type error in `/api/journal/route.ts`
+- [x] **Journal page type fix** — `(data ?? []) as any` cast to bridge DB `string` → `EntryType` union
+- [x] **Playwright screenshot tooling** — `scripts/screenshot.mjs` with `--prod` flag and `scripts/auth-state.json` for authenticated screenshots
+- [x] **Deals pipeline** — `/deals` page with kanban board (sourced/meeting/diligence/passed/invested), deal cards with company link + next action + days-since-update, move-stage dropdown, add/delete per column, `/api/deals` GET/POST/PATCH/DELETE
+- [x] **Journal feature** — `/journal` page with type-filtered timeline view, add/delete entries, `/api/journal` GET/POST/DELETE, entry types: outreach/meeting/event/learning/milestone/note
+- [x] **Dashboard journal widget** — recent journal entries with type-colored dots on dashboard
+- [x] **2026 design polish pass** — login page, sidebar, nav active state, dashboard layout
+
+---
+
 ## ✅ Completed (session 3 — April 15, 2026)
 
 - [x] Dashboard redesign — wider layout (max-w-5xl), top bar with greeting, icon stat cards, onboarding checklist with progress bar, colored source/status badges
@@ -118,11 +150,9 @@ Work top-to-bottom. Each item is self-contained enough to execute without re-rea
 
 ## P7 — Deals pipeline
 
-- [ ] **`/deals` page** — kanban board (sourced / meeting / diligence / passed / invested)
-  - Each card: company name, stage, next action, days in stage
-  - Drag-and-drop stage update (or simple status dropdown)
+- [x] **`/deals` page** — kanban board (sourced / meeting / diligence / passed / invested)
 - [ ] **Deal detail** — `/deals/[id]` with linked company, notes, next action edit, stage history
-- [ ] **Next action reminder** — surface deals with overdue next actions on the dashboard
+- [ ] **Next action reminder** — surface deals with overdue next actions on the dashboard (query `next_action IS NOT NULL AND updated_at < now() - interval '7 days'`)
 
 ---
 

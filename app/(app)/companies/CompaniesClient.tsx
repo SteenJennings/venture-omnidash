@@ -4,6 +4,35 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import type { Company } from "@/types/database.types";
 
+function CompanyLogo({ name, website, size = 32 }: { name: string; website: string | null; size?: number }) {
+  const [failed, setFailed] = useState(false);
+  const domain = website ? website.replace(/^https?:\/\//, "").replace(/\/.*$/, "") : null;
+  const initial = name.charAt(0).toUpperCase();
+
+  if (domain && !failed) {
+    return (
+      <img
+        src={`https://logo.clearbit.com/${domain}`}
+        alt={name}
+        width={size}
+        height={size}
+        onError={() => setFailed(true)}
+        className="rounded object-contain"
+        style={{ width: size, height: size }}
+      />
+    );
+  }
+
+  return (
+    <div
+      className="flex shrink-0 items-center justify-center rounded bg-[var(--surface-raised)] text-[var(--muted)] font-semibold"
+      style={{ width: size, height: size, fontSize: size * 0.4 }}
+    >
+      {initial}
+    </div>
+  );
+}
+
 type CompanyWithClipCount = Company & { clips: { count: number }[] };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -90,13 +119,8 @@ export default function CompaniesClient({ companies }: { companies: CompanyWithC
                   href={`/companies/${company.id}`}
                   className="flex items-center gap-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-5 py-3.5 transition-all hover:border-[var(--accent)]/30 hover:bg-[var(--surface-raised)]"
                 >
-                  {/* Status dot */}
-                  <div className={`h-1.5 w-1.5 shrink-0 rounded-full ${
-                    status === "invested" ? "bg-emerald-400" :
-                    status === "diligence" ? "bg-amber-400" :
-                    status === "tracking" ? "bg-sky-400" :
-                    status === "passed" ? "bg-[var(--muted-2)]" : "bg-[var(--border)]"
-                  }`} />
+                  {/* Logo */}
+                  <CompanyLogo name={company.name} website={company.website} size={28} />
 
                   {/* Name + meta */}
                   <div className="min-w-0 flex-1">
